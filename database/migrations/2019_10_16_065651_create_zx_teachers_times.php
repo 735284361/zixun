@@ -15,7 +15,7 @@ class CreateZxTeachersTimes extends Migration
     {
         Schema::create('zx_teachers_times', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->integer('teacher_id')->comment('老师ID'); // 老师dev22
+            $table->integer('teacher_id')->comment('老师ID'); // 老师dev33
             $table->
             $table->timestamps();
         });
