@@ -45,6 +45,7 @@ class WeChatController extends Controller
             $token = $createToken->accessToken;
 
             return response()->json([
+                'code' => 0,
                 'token' => $token,
                 'data' => $user,
             ],200);
