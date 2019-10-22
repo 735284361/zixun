@@ -22,7 +22,11 @@ Route::get('/wechat/register', 'Mini\WeChatController@register');
 
 //前端小程序拿到的地址：https://域名/api/v1/自己写的接口
 Route::group(['prefix' => '/v1'], function () {
-    Route::any('/user/login', 'UserController@wxLogin');
+    // 讲师接口
+    Route::get('/teacher/list', 'Mini\TeachersController@lists'); // 列表
+
+    // Banner 列表
+    Route::get('banner/list','Mini\BannersController@lists'); // 列表
 });
 
 Route::group(['middleware' => ['auth:api']], function () {
