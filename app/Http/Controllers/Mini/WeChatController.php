@@ -32,7 +32,7 @@ class WeChatController extends Controller
         $userSub = UsersSub::where('open_id',$openId)->first();
         if (!$userSub) {
             // 该用户不存在
-            return response()->json(['code' => '401']);
+            return response()->json(['code' => '10000']);
         } else {
             // 该用户存在 覆盖用户之前登录信息
             $userSub->session_key = $sessionKey;
