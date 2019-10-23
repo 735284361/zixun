@@ -16,6 +16,8 @@ class CreateZxOrdersEval extends Migration
         Schema::create('zx_orders_eval', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->bigInteger('order_id')->unique();
+            $table->bigInteger('user_id');
+            $table->bigInteger('teacher_id');
             $table->integer('attitude')->comment('态度');
             $table->integer('speciality')->comment('专业性');
             $table->integer('satisfaction')->comment('满意度');

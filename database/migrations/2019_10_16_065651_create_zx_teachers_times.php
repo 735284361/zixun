@@ -16,9 +16,9 @@ class CreateZxTeachersTimes extends Migration
         Schema::create('zx_teachers_times', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->integer('teacher_id')->comment('老师ID'); // 老师
-            $table->integer('date')->comment('日期');
-            $table->integer('start_time')->comment('时间段开始时间');
-            $table->integer('end_time')->comment('时间段结束时间');
+            $table->integer('date_at')->comment('日期');
+            $table->integer('start_at')->comment('时间段开始时间');
+            $table->integer('end_at')->comment('时间段结束时间');
             $table->integer('status')->default(10)->comment('时间段状态');
             $table->timestamps();
         });

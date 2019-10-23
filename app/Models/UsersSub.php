@@ -17,4 +17,9 @@ class UsersSub extends Authenticatable
 
     protected $guarded = [];
 
+    public function likes()
+    {
+        return $this->belongsToMany(Teacher::class,'zx_users_teachers_likes','teacher_id','uid');
+    }
+
 }

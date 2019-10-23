@@ -15,7 +15,7 @@ class CreateZxOrders extends Migration
     {
         Schema::create('zx_orders', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->integer('uid');
+            $table->integer('user_id');
             $table->integer('teacher_id');
             $table->string('order_no')->comment('订单号');
             $table->integer('start_at')->comment('预约开始时间');

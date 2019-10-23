@@ -11,7 +11,7 @@ class Teacher extends Model
     protected $table = 'zx_teachers';
 
     // 讲师时刻 课表 一对多
-    public function times()
+    public function teacherTimes()
     {
         return $this->hasMany(TeachersTime::class,'teacher_id','id');
     }
@@ -25,7 +25,13 @@ class Teacher extends Model
     //
     public function likes()
     {
-        return $this->belongsToMany(User::class,'zx_users_teachers_likes','teacher_id','user_id');
+        return $this->belongsToMany(\App\User::class,'zx_users_teachers_likes','teacher_id','user_id');
+    }
+
+    public function userLike()
+    {
+        return $this->belongsToMany(UsersSub::class,'zx_users_teachers_likes','teacher_id','user_id',null,'uid')
+            ->where('user_id',170379);
     }
 
     // 订单
@@ -34,9 +40,10 @@ class Teacher extends Model
         return $this->hasMany(Order::class,'teacher_id','id');
     }
 
+    // 订单评论
     public function orderEval()
     {
-
+        return $this->hasMany(OrderEval::class,'teacher_id','id');
     }
 
 }

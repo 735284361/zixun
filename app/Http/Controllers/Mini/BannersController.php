@@ -10,6 +10,7 @@ class BannersController extends Controller
 {
     //
 
+    // Banner 列表
     public function lists()
     {
         return Banner::where('status',Banner::STATUS_ONLINE)->get();
