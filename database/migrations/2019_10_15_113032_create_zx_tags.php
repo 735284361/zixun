@@ -16,6 +16,7 @@ class CreateZxTags extends Migration
         Schema::create('zx_tags', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('tag')->comment('标签');
+            $table->tinyInteger('status')->default(10)->comment('状态');
             $table->timestamps();
         });
     }

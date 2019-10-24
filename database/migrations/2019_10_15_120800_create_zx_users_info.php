@@ -19,6 +19,8 @@ class CreateZxUsersInfo extends Migration
             $table->string('name')->comment('预约人');
             $table->string('post')->comment('职位');
             $table->bigInteger('phone')->comment('手机号');
+            $table->string('email')->nullable()->comment('邮箱');
+            $table->string('company')->comment('公司');
             $table->timestamps();
         });
     }

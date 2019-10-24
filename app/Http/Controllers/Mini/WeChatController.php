@@ -89,7 +89,7 @@ class WeChatController extends Controller
 
     public function profile()
     {
-        return Auth::guard('api')->user();
+        return Auth::guard('api')->id();
     }
 
 }

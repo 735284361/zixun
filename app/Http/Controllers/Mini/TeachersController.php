@@ -13,12 +13,19 @@ class TeachersController extends Controller
 {
     //
 
-    public function lists()
+    // 讲师列表
+    public function lists(Request $request)
     {
+        $id = $request->id;
+        $map = [];
+        if ($id) {
+            $map['id'] = $id;
+        }
+
         $list = Teacher::with(['tags' => function($query) {
             // 老师标签
             return $query->select('tag');
-        }])->get();
+        }])->where('status',Teacher::STATUS_ENABLE)->where($map)->get();
         return $list;
     }
 
@@ -35,9 +42,7 @@ class TeachersController extends Controller
             $startAt = strtotime(date('Ymd'));
             $endAt = $startAt + 30*24*3600;
             return $query->where('date_at','>=',$startAt)->where('date_at','<=',$endAt);
-        }])->with(['userLike' => function($query) {
-            return $query->select('user_id');
-        }])->first();
+        }])->withCount('userLike')->first();
 
         // 咨询历史
         $orders = Order::where('teacher_id',$id)->where('subject','!=',null)

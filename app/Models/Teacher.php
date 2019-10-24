@@ -10,6 +10,10 @@ class Teacher extends Model
 
     protected $table = 'zx_teachers';
 
+    // 老师状态
+    const STATUS_ENABLE = 10; // 启用
+    const STATUS_DISABLE = 20; // 禁用
+
     // 讲师时刻 课表 一对多
     public function teacherTimes()
     {
@@ -30,8 +34,8 @@ class Teacher extends Model
 
     public function userLike()
     {
-        return $this->belongsToMany(UsersSub::class,'zx_users_teachers_likes','teacher_id','user_id',null,'uid')
-            ->where('user_id',170379);
+        return $this->belongsToMany(\App\User::class,'zx_users_teachers_likes','teacher_id','user_id',null,'uid')
+            ->where('user_id',auth('api')->id());
     }
 
     // 订单
@@ -44,6 +48,20 @@ class Teacher extends Model
     public function orderEval()
     {
         return $this->hasMany(OrderEval::class,'teacher_id','id');
+    }
+
+    public function status($ind = null)
+    {
+        $arr = [
+            self::STATUS_ENABLE => '启用',
+            self::STATUS_DISABLE => '禁用',
+        ];
+
+        if ($ind !== null) {
+            return array_key_exists($ind,$arr) ? $arr[$ind] : $arr[self::STATUS_DISABLE];
+        }
+
+        return $arr;
     }
 
 }

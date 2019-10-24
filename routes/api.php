@@ -28,8 +28,19 @@ Route::group(['prefix' => '/v1'], function () {
 
     // Banner 列表
     Route::get('banner/list','Mini\BannersController@lists'); // 列表
+
+    // Tag 标签
+    Route::get('tag/list','Mini\TagsController@lists'); // 列表
+
+
+    /**
+     * ****************************************
+     * 登录验证
+     * ****************************************
+     */
+    Route::group(['middleware' => ['auth:api']], function () {
+        Route::post('userinfo/postUser','Mini\UserInfoController@postUser');
+        Route::post('profile','Mini\WeChatController@profile');
+    });
 });
 
-Route::group(['middleware' => ['auth:api']], function () {
-    Route::any('/wechat/profile', 'Mini\WeChatController@profile');
-});
