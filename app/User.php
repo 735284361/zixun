@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Models\Teacher;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -44,9 +45,15 @@ class User extends Authenticatable
 
     protected $guarded=[];
 
+    // 用户子表信息
     public function userSub()
     {
         return $this->hasOne(User::class,'uid','uid')->where('since_from',5);
     }
 
+    // 判断用户是否是讲师
+    public function teacherInfo()
+    {
+        return $this->hasOne(Teacher::class,'user_id','uid');
+    }
 }

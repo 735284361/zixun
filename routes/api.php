@@ -41,6 +41,15 @@ Route::group(['prefix' => '/v1'], function () {
     Route::group(['middleware' => ['auth:api']], function () {
         Route::post('userinfo/postUser','Mini\UserInfoController@postUser');
         Route::post('profile','Mini\WeChatController@profile');
+
+        // 用户相关接口
+        Route::group(['prefix' => 'user'], function() {
+            Route::get('account','Mini\UsersController@myAccount');
+        });
+
+        Route::group(['prefix' => 'teacher'], function() {
+            Route::get('set_time','Mini\TeachersController@setTime');
+        });
     });
 });
 

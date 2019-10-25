@@ -26,12 +26,13 @@ class Teacher extends Model
         return $this->belongsToMany(Tag::class,'zx_teachers_tags','teacher_id','tag_id');
     }
 
-    //
+    // 所有收藏用户
     public function likes()
     {
         return $this->belongsToMany(\App\User::class,'zx_users_teachers_likes','teacher_id','user_id');
     }
 
+    // 用户收藏
     public function userLike()
     {
         return $this->belongsToMany(\App\User::class,'zx_users_teachers_likes','teacher_id','user_id',null,'uid')

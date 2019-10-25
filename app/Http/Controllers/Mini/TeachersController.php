@@ -7,6 +7,7 @@ use App\Models\OrderEval;
 use App\Models\Teacher;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class TeachersController extends Controller
@@ -59,5 +60,17 @@ class TeachersController extends Controller
         $data->eval = $eval;
 
         return response()->json($data);
+    }
+
+    public function setTime()
+    {
+        $teacher = new Teacher();
+
+        if (Auth::user()->can('isTeacher',$teacher)) {
+            echo '1';
+        } else {
+            echo '2';
+        }
+
     }
 }
