@@ -53,6 +53,11 @@ Route::group(['prefix' => '/v1'], function () {
             Route::get('post_like_teacher','Mini\TeachersController@postLikeTeacher');
             Route::get('delete_like_teacher','Mini\TeachersController@deleteLikeTeacher');
         });
+
+        Route::group(['prefix' => 'order'], function() {
+            Route::get('test','Mini\OrdersController@test');
+            Route::get('getCache','Mini\OrdersController@getCache');
+        });
     });
 });
 

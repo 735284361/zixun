@@ -119,6 +119,12 @@ class TeachersController extends Controller
         }
     }
 
+    /**
+     * 用户收藏
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     * @throws \Illuminate\Validation\ValidationException
+     */
     public function postLikeTeacher(Request $request)
     {
         $this->validate($request,['id' => 'required|integer']);
@@ -133,6 +139,12 @@ class TeachersController extends Controller
         return response()->json(true);
     }
 
+    /**
+     * 用户取消收藏
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     * @throws \Illuminate\Validation\ValidationException
+     */
     public function deleteLikeTeacher(Request $request)
     {
         $this->validate($request,['id' => 'required|integer']);
@@ -141,4 +153,5 @@ class TeachersController extends Controller
         $teacher->likes()->detach(Auth::user()->id);
         return response()->json(true);
     }
+
 }
