@@ -6,6 +6,7 @@ use App\Http\Requests\TeacherTimesRequest;
 use App\Models\Order;
 use App\Models\OrderEval;
 use App\Models\Teacher;
+use App\Models\TeachersTime;
 use App\Services\TeachersService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -108,7 +109,7 @@ class TeachersController extends Controller
         $teacher = Teacher::where('user_id',auth('api')->id())->first();
 
         if (Auth::user()->can('view',$teacher)) {
-            $data = Teacher::where('teacher_id',$teacher->id)->select();
+            $data = TeachersTime::where('teacher_id',auth('api')->id())->where('date_at',strtotime($request->date_at))->select();
             return response()->json([
                 'code' => 0,
                 'data' => $data
