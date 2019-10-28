@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers\Mini;
 
+use App\Http\Requests\TeacherTimesRequest;
 use App\Models\Order;
 use App\Models\OrderEval;
 use App\Models\Teacher;
+use App\Services\TeachersService;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
@@ -13,6 +15,13 @@ use Illuminate\Support\Facades\DB;
 class TeachersController extends Controller
 {
     //
+
+    protected $teacherService;
+
+    public function __construct()
+    {
+        $this->teacherService = new TeachersService();
+    }
 
     // 讲师列表
     public function lists(Request $request)
@@ -62,15 +71,19 @@ class TeachersController extends Controller
         return response()->json($data);
     }
 
-    public function setTime()
+    public function setTime(TeacherTimesRequest $request)
     {
-        $teacher = new Teacher();
+        $teacher = Teacher::where('user_id',auth('api')->id())->first();
 
-        if (Auth::user()->can('isTeacher',$teacher)) {
-            echo '1';
+        if (Auth::user()->can('create',$teacher)) {
+            $res = $this->teacherService->addTimes($request->all());
+            if ($res) {
+                return ['code' => 0,'msg' => '修改成功'];
+            } else {
+                return ['code' => 1,'msg' => '修改失败'];
+            }
         } else {
-            echo '2';
+            return ['code' => 1,'msg' => '没有修改权限'];
         }
-
     }
 }

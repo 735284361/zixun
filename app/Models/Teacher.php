@@ -10,6 +10,8 @@ class Teacher extends Model
 
     protected $table = 'zx_teachers';
 
+    protected $guarded = [];
+
     // 老师状态
     const STATUS_ENABLE = 10; // 启用
     const STATUS_DISABLE = 20; // 禁用
@@ -49,6 +51,11 @@ class Teacher extends Model
     public function orderEval()
     {
         return $this->hasMany(OrderEval::class,'teacher_id','id');
+    }
+
+    public function user()
+    {
+        return $this->hasOne(\App\User::class,'uid','user_id');
     }
 
     public function status($ind = null)

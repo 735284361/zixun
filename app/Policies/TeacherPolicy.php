@@ -2,6 +2,7 @@
 
 namespace App\Policies;
 
+use App\Models\Teacher;
 use App\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
@@ -19,8 +20,8 @@ class TeacherPolicy
         //
     }
 
-    public function isTeacher(Teacher $teacher)
+    public function create(User $user, Teacher $teacher)
     {
-        return auth('api')->id() == $teacher->user_id;
+        return $user->uid == $teacher->user_id;
     }
 }
