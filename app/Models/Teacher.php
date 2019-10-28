@@ -37,7 +37,8 @@ class Teacher extends Model
     // 用户收藏
     public function userLike()
     {
-        return $this->belongsToMany(\App\User::class,'zx_users_teachers_likes','teacher_id','user_id',null,'uid')
+        return $this->belongsToMany(\App\User::class,'zx_users_teachers_likes',
+            'teacher_id','user_id',null,'uid')
             ->where('user_id',auth('api')->id());
     }
 

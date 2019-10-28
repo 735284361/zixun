@@ -7,6 +7,7 @@ use App\Models\Order;
 use App\Models\OrderEval;
 use App\Models\Teacher;
 use App\Services\TeachersService;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
@@ -115,5 +116,28 @@ class TeachersController extends Controller
         } else {
             return ['code' => 1,'msg' => '没有修改权限'];
         }
+    }
+
+    public function postLikeTeacher(Request $request)
+    {
+        $this->validate($request,['id' => 'required|integer']);
+        $id = $request->id;
+        $teacher = Teacher::where('id', $id)->withCount('userLike')->first();
+        if ($teacher->user_like_count == 0) {
+            $teacher->likes()->attach(auth('api')->id(),[
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now()
+            ]);
+        }
+        return true;
+    }
+
+    public function deleteLikeTeacher(Request $request)
+    {
+        $this->validate($request,['id' => 'required|integer']);
+        $id = $request->id;
+        $teacher = Teacher::where('id', $id)->first();
+        $teacher->likes()->detach(Auth::user()->id);
+        return true;
     }
 }
