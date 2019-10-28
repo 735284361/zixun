@@ -94,9 +94,11 @@ class TeachersController extends Controller
 
     /**
      * 获取讲师设置过的时间
-     * @return \Illuminate\Http\JsonResponse
+     * @param Request $request
+     * @return array|\Illuminate\Http\JsonResponse
+     * @throws \Illuminate\Validation\ValidationException
      */
-    public function getTimes(Request $request)
+    public function getTime(Request $request)
     {
         $this->validate($request,[
             'date_at' => 'required|date_format:Ymd'
