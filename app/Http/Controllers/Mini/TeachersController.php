@@ -129,7 +129,7 @@ class TeachersController extends Controller
                 'updated_at' => Carbon::now()
             ]);
         }
-        return true;
+        return response()->json(true);
     }
 
     public function deleteLikeTeacher(Request $request)
@@ -138,6 +138,6 @@ class TeachersController extends Controller
         $id = $request->id;
         $teacher = Teacher::where('id', $id)->first();
         $teacher->likes()->detach(Auth::user()->id);
-        return true;
+        return response()->json(true);
     }
 }
