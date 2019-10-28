@@ -109,7 +109,7 @@ class TeachersController extends Controller
         $teacher = Teacher::where('user_id',auth('api')->id())->first();
 
         if (Auth::user()->can('view',$teacher)) {
-            $data = TeachersTime::where('teacher_id',auth('api')->id())->where('date_at',strtotime($request->date_at))->select();
+            $data = TeachersTime::where('teacher_id',$teacher->id)->where('date_at',strtotime($request->date_at))->get();
             return response()->json([
                 'code' => 0,
                 'data' => $data
