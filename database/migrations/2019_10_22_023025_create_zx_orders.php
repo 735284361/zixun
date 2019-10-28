@@ -18,6 +18,7 @@ class CreateZxOrders extends Migration
             $table->integer('user_id');
             $table->integer('teacher_id');
             $table->string('order_no')->comment('订单号');
+            $table->double('price')->comment('订单金额');
             $table->integer('start_at')->comment('预约开始时间');
             $table->integer('end_at')->comment('预约截止时间');
             $table->integer('time_len')->comment('预约时长');

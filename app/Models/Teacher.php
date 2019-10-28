@@ -54,6 +54,7 @@ class Teacher extends Model
         return $this->hasMany(OrderEval::class,'teacher_id','id');
     }
 
+    // 关联用户信息
     public function user()
     {
         return $this->hasOne(\App\User::class,'uid','user_id');

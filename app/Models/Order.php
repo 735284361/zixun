@@ -10,9 +10,13 @@ class Order extends Model
 
     protected $table = 'zx_orders';
 
+    // 订单状态
     const ORDER_PENDING = 10; // 待付款
     const ORDER_PAID = 20; // 已付款
     const ORDER_COMPLETED = 30; // 已完成
+
+    // 订单前缀
+    const ORDER_PRE_ZIXUN = 'ZX';
 
     // 订单评论
     public function orderEval()
@@ -24,6 +28,12 @@ class Order extends Model
     public function userInfo()
     {
         return $this->hasOne(\App\User::class,'uid','user_id');
+    }
+
+    public function getOrderNo($pre)
+    {
+        $data = DB::select('select CreateOrderNo("'.$pre.'",8) as order_no limit 1');
+        return $data[0]['order_no'];
     }
 
     public function status($ind = null) {
