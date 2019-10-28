@@ -24,4 +24,9 @@ class TeacherPolicy
     {
         return $user->uid == $teacher->user_id;
     }
+
+    public function view(User $user, Teacher $teacher)
+    {
+        return $user->uid == $teacher->user_id;
+    }
 }

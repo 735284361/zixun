@@ -71,7 +71,12 @@ class TeachersController extends Controller
         return response()->json($data);
     }
 
-    public function setTime(TeacherTimesRequest $request)
+    /**
+     * 讲师时间设置
+     * @param TeacherTimesRequest $request
+     * @return array
+     */
+    public function setTimes(TeacherTimesRequest $request)
     {
         $teacher = Teacher::where('user_id',auth('api')->id())->first();
 
@@ -82,6 +87,29 @@ class TeachersController extends Controller
             } else {
                 return ['code' => 1,'msg' => '修改失败'];
             }
+        } else {
+            return ['code' => 1,'msg' => '没有修改权限'];
+        }
+    }
+
+    /**
+     * 获取讲师设置过的时间
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function getTimes(Request $request)
+    {
+        $this->validate($request,[
+            'date_at' => 'required|date_format:Ymd'
+        ]);
+
+        $teacher = Teacher::where('user_id',auth('api')->id())->first();
+
+        if (Auth::user()->can('view',$teacher)) {
+            $data = Teacher::where('teacher_id',$teacher->id)->select();
+            return response()->json([
+                'code' => 0,
+                'data' => $data
+            ]);
         } else {
             return ['code' => 1,'msg' => '没有修改权限'];
         }
