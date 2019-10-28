@@ -33,6 +33,8 @@ Route::group(['prefix' => '/v1'], function () {
     Route::get('tag/list','Mini\TagsController@lists'); // 列表
 
 
+    Route::get('test','Mini\OrdersController@test');
+    Route::get('getCache','Mini\OrdersController@getCache');
     /**
      * ****************************************
      * 登录验证
@@ -55,8 +57,6 @@ Route::group(['prefix' => '/v1'], function () {
         });
 
         Route::group(['prefix' => 'order'], function() {
-            Route::get('test','Mini\OrdersController@test');
-            Route::get('getCache','Mini\OrdersController@getCache');
         });
     });
 });
