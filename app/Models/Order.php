@@ -10,6 +10,8 @@ class Order extends Model
 
     protected $table = 'zx_orders';
 
+    protected $guarded = [];
+
     // 订单状态
     const ORDER_PENDING = 10; // 待付款
     const ORDER_PAID = 20; // 已付款
