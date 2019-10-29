@@ -37,7 +37,7 @@ class TeachersService
                 $resArr[] = $res->id;
             }
         }
-        $result2 = $teacher->teacherTimes()->whereNotIn('id',$resArr)->where('status','!=',TeachersTime::STATUS_TIMES_BOOKED)->delete();
+        $result2 = $teacher->teacherTimes()->where('date_at',$data['date_at'])->whereNotIn('id',$resArr)->where('status','!=',TeachersTime::STATUS_TIMES_BOOKED)->delete();
 
         if ($result1 && $result2) {
             DB::commit();
