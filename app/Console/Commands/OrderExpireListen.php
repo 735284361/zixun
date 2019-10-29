@@ -47,7 +47,7 @@ class OrderExpireListen extends Command
         $pattern = '__keyevent@' . $cachedb . '__:expired';
         Redis::subscribe($pattern, function ($channel) {     // 订阅键过期事件
             // laravel_cache:ORDER_CONFIRM:7 这样的格式
-            Log::warning('continue');
+            Log::warning('continue1');
             $channel = trim(strstr($channel, ':'), ':');
             $key_type = str_before($channel, ':');
             switch ($key_type) {
