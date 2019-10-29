@@ -30,7 +30,7 @@ class TeachersService
             $obj['date_at'] = $date_at;
             $obj['start_at'] = strtotime($timeArr[$i]['start_at']);
             $obj['end_at'] = strtotime($timeArr[$i]['end_at']);
-            $res = $teacher->teacherTimes()->where('status','!=',TeachersTime::STATUS_TIMES_BOOKED)->updateOrCreate($obj);
+            $res = $teacher->teacherTimes()->where('date_at',$data['date_at'])->where('status','!=',TeachersTime::STATUS_TIMES_BOOKED)->updateOrCreate($obj);
             if (!$res) {
                 $result1 = false;
             } else {
