@@ -102,14 +102,12 @@ class TeachersController extends Controller
      */
     public function getTime(Request $request)
     {
-        $this->validate($request,[
-            'date_at' => 'required|date_format:Ymd'
-        ]);
-
         $teacher = Teacher::where('user_id',auth('api')->id())->first();
 
         if (Auth::user()->can('view',$teacher)) {
-            $data = TeachersTime::where('teacher_id',$teacher->id)->where('date_at',strtotime($request->date_at))->get();
+            $startAt = strtotime(date('Ymd'));
+            $endAt = $startAt + 30*24*3600;
+            $data = TeachersTime::where('teacher_id',$teacher->id)->where('date_at','>=',$startAt)->where('date_at','<=',$endAt)->get();
             return response()->json([
                 'code' => 0,
                 'data' => $data
