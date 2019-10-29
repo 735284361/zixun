@@ -39,7 +39,7 @@ class TeachersService
         }
         $result2 = $teacher->teacherTimes()->where('date_at',$date_at)->whereNotIn('id',$resArr)->where('status','!=',TeachersTime::STATUS_TIMES_BOOKED)->delete();
 
-        if ($result1 && $result2) {
+        if ($result1 !== false && $result2 !== false) {
             DB::commit();
             return true;
         } else {
