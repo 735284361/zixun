@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Mini;
 
+use App\Jobs\CloseOrder;
+use App\Models\Order;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Cache;
@@ -39,6 +41,7 @@ class OrdersController extends Controller
 
     public function postOrder()
     {
-
+        $order = Order::where('id',3)->first();
+        $this->dispatch(new CloseOrder($order, 10));
     }
 }
