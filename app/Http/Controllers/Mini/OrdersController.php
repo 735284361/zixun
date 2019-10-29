@@ -42,6 +42,6 @@ class OrdersController extends Controller
     public function postOrder()
     {
         $order = Order::where('id',3)->first();
-        $this->dispatch(new CloseOrder($order, 10));
+        $this->dispatch(new CloseOrder($order, 60));
     }
 }
