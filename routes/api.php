@@ -35,6 +35,7 @@ Route::group(['prefix' => '/v1'], function () {
 
     Route::get('test','Mini\OrdersController@test');
     Route::get('getCache','Mini\OrdersController@getCache');
+    Route::get('jianting','Mini\OrdersController@jianting');
     /**
      * ****************************************
      * 登录验证
