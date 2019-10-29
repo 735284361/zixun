@@ -13,7 +13,7 @@ class OrdersController extends Controller
 
     public function test()
     {
-        Cache::store('redis')->put('ORDER_CONFIRM:3',3,60);
+        Cache::store('redis')->put('ORDER_CONFIRM:3',3,5);
         $data = Cache::get('ORDER_CONFIRM:3');
         return response()->json($data);
     }
