@@ -42,6 +42,8 @@ class OrdersController extends Controller
     public function postOrder()
     {
         $order = Order::where('id',3)->first();
-        $this->dispatch(new CloseOrder($order, 60));
+//        $this->dispatch(new CloseOrder($order, 60));
+
+        CloseOrder::dispatch($order)->delay(now()->addMinute(1));
     }
 }

@@ -21,11 +21,11 @@ class CloseOrder implements ShouldQueue
      *
      * @return void
      */
-    public function __construct(Order $order, $delay)
+    public function __construct(Order $order)
     {
         $this->order = $order;
         // 设置延迟的时间，delay() 方法的参数代表多少秒之后执行
-        $this->delay($delay);
+//        $this->delay($delay);
     }
 
     // 定义这个任务类具体的执行逻辑
