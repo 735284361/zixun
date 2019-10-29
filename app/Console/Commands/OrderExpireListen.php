@@ -45,15 +45,14 @@ class OrderExpireListen extends Command
         Log::warning('start');
         $cachedb = config('database.redis.cache.database', 0);
         $pattern = '__keyevent@' . $cachedb . '__:expired';
-        $redis = Redis::connections('publisher');
-        $redis->psubscribe([$pattern], function ($channel) {     // 订阅键过期事件
+        Redis::subscribe($pattern, function ($channel) {     // 订阅键过期事件
             // laravel_cache:ORDER_CONFIRM:7 这样的格式
-            Log::warning('continue123');
+            Log::warning('continue');
             $channel = trim(strstr($channel, ':'), ':');
             $key_type = str_before($channel, ':');
             switch ($key_type) {
                 case 'ORDER_CONFIRM':
-                    Log::warning('continue');
+                    Log::warning('continue2');
                     $order_id = str_after($channel, ':');    // 取出订单 ID
                     DB::enableQueryLog();
                     $order = Order::query()->find($order_id);
