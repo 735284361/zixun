@@ -74,7 +74,7 @@ class OrderExpireListen extends Command
         Log::warning('start');
         $redis=Redis::connection('publisher');//创建新的实例
         $redis->psubscribe(['__keyevent@*__:expired'], function ($message, $channel) {
-            Log::warning('continue');
+            Log::warning($message.PHP_EOL);
             echo $channel.PHP_EOL;//订阅的频道
             echo $message.PHP_EOL;//过期的key
             echo '---'.PHP_EOL;
