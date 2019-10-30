@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Models\Order;
 use App\Models\Teacher;
 use App\Models\TeachersTime;
+use Illuminate\Support\Facades\DB;
 
 class OrdersService
 {
@@ -32,9 +33,7 @@ class OrdersService
         if (count($timeIdArr) !== $count) return ['code' => 1,'msg' => '时间数据选择错误'];
         if ($count > 1) {
             for ($i = 0; $i < $count; $i++) {
-                // 时间段大于 1
-                // 非最后一个时间段
-                // 第一个时间段的开结束间等于第二个时间段的开始时间
+                // 时间段大于1、非最后一个时间段、第一个时间段的开结束间等于第二个时间段的开始时间
                 if (($i != $count -1) && ($times[$i]['end_at'] != $times[$i+1]['start_at'])) {
                     return ['code' => 1,'msg' => '时间数据选择错误'];
                 }
@@ -43,11 +42,7 @@ class OrdersService
 
         }
 
-        // 更新讲师时间状态
-        TeachersTime::whereIn('id',$timeIdArr)->save([
-            'status' => TeachersTime::STATUS_TIMES_BOOKED
-        ]);
-
+        // 存储订单信息
         $startAt = $times[0]['start_at'];
         $endAt = $times[$count - 1]['end_at'];
         $timeLen = ($endAt - $startAt) / 60;
@@ -59,7 +54,33 @@ class OrdersService
         $order->end_at = $endAt;
         $order->time_len = $timeLen;
         $order->subject = $data['subject'];
+        $order->status = Order::ORDER_PENDING;
 
-        $order->save();
+        DB::beginTransaction();
+        $orderRes = $order->save(); // 存储订单信息
+
+        // 更新讲师时间状态
+        $timeRes = TeachersTime::whereIn('id',$timeIdArr)->save([
+            'status' => TeachersTime::STATUS_TIMES_BOOKED
+        ]);
+        // 存储订单预订的时刻信息
+        foreach ($timeIdArr as $v) {
+            $timeArr[]['order_id'] = $orderRes->id;
+            $timeArr[]['time_id'] = $v;
+        }
+        $orderTimeRes = $orderRes->orderEval()->saveMany($timeArr);
+
+        if ($orderRes && $timeRes && $orderTimeRes) {
+            DB::commit();
+            return true;
+        } else {
+            DB::rollBack();
+            return false;
+        }
+    }
+
+    public function checkTime()
+    {
+
     }
 }

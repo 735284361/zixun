@@ -56,9 +56,11 @@ Route::group(['prefix' => '/v1'], function () {
             Route::get('get_time','Mini\TeachersController@getTime');
             Route::get('post_like_teacher','Mini\TeachersController@postLikeTeacher');
             Route::get('delete_like_teacher','Mini\TeachersController@deleteLikeTeacher');
+            Route::get('my_teacher_info','Mini\TeachersController@myTeacherInfo');
         });
 
         Route::group(['prefix' => 'order'], function() {
+            Route::post('post_order','Mini\OrdersController@postOrder');
         });
     });
 });

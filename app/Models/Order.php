@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 class Order extends Model
 {
@@ -32,9 +33,17 @@ class Order extends Model
         return $this->hasOne(\App\User::class,'uid','user_id');
     }
 
+    // 订单和预订的时间关联
+    public function orderTimes()
+    {
+        return $this->hasMany(OrdersTimesMap::class,'order_id','id');
+    }
+
+    // 获取订单号
     public function getOrderNo($pre)
     {
-        $data = DB::select('select CreateOrderNo("'.$pre.'",8) as order_no limit 1');
+        $data = $this->select('select CreateOrderNo("'.$pre.'",8) as order_no limit 1');
+        $data = json_decode($data,true);
         return $data[0]['order_no'];
     }
 

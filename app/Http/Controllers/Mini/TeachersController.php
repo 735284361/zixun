@@ -104,10 +104,9 @@ class TeachersController extends Controller
     {
         $this->validate($request,['id'=>'required|integer']);
 
-        $teacher = Teacher::where('user_id',auth('api')->id())->first();
         $startAt = strtotime(date('Ymd'));
         $endAt = $startAt + 30*24*3600;
-        $data = TeachersTime::where('teacher_id',$teacher->id)->where('date_at','>=',$startAt)->where('date_at','<=',$endAt)->get();
+        $data = TeachersTime::where('teacher_id',$request->id)->where('date_at','>=',$startAt)->where('date_at','<=',$endAt)->get();
 
         return response()->json(['code' => 0,'data' => $data]);
     }
@@ -145,6 +144,15 @@ class TeachersController extends Controller
         $teacher = Teacher::where('id', $id)->first();
         $teacher->likes()->detach(Auth::user()->id);
         return response()->json(true);
+    }
+
+    /**
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function myTeacherInfo()
+    {
+        $teacher = Teacher::where('user_id',auth('api')->id())->first();
+        return response()->json(['code' => 0,'data' => $teacher]);
     }
 
 }

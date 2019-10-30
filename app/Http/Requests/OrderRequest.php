@@ -26,7 +26,8 @@ class OrderRequest extends FormRequest
         return [
             //
             'teacher_id' => 'id',
-
+            'times.*' => 'required|integer',
+            'subject' => 'nullable|max=255'
         ];
     }
 }
