@@ -23,27 +23,15 @@ class OrdersController extends Controller
 
     public function getCache()
     {
-        $data = Cache::get('ORDER_CONFIRM:3');
+        $data = Cache::get();
         return response()->json($data);
-    }
-
-    public function jianting()
-    {
-        Log::warning('start');
-        $redis=Redis::connection('publisher');//创建新的实例
-        $redis->subscribe(['__keyevent@*__:expired'], function ($message, $channel) {
-            Log::warning($message.PHP_EOL);
-            echo $channel.PHP_EOL;//订阅的频道
-            echo $message.PHP_EOL;//过期的key
-            echo '---'.PHP_EOL;
-        });
     }
 
     public function postOrder()
     {
         $order = Order::where('id',3)->first();
-//        $this->dispatch(new CloseOrder($order, 60));
 
-        CloseOrder::dispatch($order)->delay(now()->addMinute(1));
+        $res = CloseOrder::dispatch($order)->delay(now()->addMinute(1));
+        return response()->json($res);
     }
 }

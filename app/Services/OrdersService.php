@@ -28,11 +28,8 @@ class OrdersService
         }])->where('id',$data['teacher_id'])->first();
         // 判断所选时间是否有效
         $count = count($times['teacher_times']);
-
         // 上传的时间数量和查出来满足条件的时间数量不等
         if (count($timeIdArr) !== $count) return ['code' => 1,'msg' => '时间数据选择错误'];
-
-        //
         if ($count > 1) {
             for ($i = 0; $i < $count; $i++) {
                 // 时间段大于 1
@@ -48,7 +45,7 @@ class OrdersService
 
         // 更新讲师时间状态
         TeachersTime::whereIn('id',$timeIdArr)->save([
-//            'status' => TeachersTime::
+            'status' => TeachersTime::STATUS_TIMES_BOOKED
         ]);
 
         $startAt = $times[0]['start_at'];

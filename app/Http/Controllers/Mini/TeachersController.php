@@ -102,19 +102,14 @@ class TeachersController extends Controller
      */
     public function getTime(Request $request)
     {
-        $teacher = Teacher::where('user_id',auth('api')->id())->first();
+        $this->validate($request,['id'=>'required|integer']);
 
-        if (Auth::user()->can('view',$teacher)) {
-            $startAt = strtotime(date('Ymd'));
-            $endAt = $startAt + 30*24*3600;
-            $data = TeachersTime::where('teacher_id',$teacher->id)->where('date_at','>=',$startAt)->where('date_at','<=',$endAt)->get();
-            return response()->json([
-                'code' => 0,
-                'data' => $data
-            ]);
-        } else {
-            return ['code' => 1,'msg' => '没有修改权限'];
-        }
+        $teacher = Teacher::where('user_id',auth('api')->id())->first();
+        $startAt = strtotime(date('Ymd'));
+        $endAt = $startAt + 30*24*3600;
+        $data = TeachersTime::where('teacher_id',$teacher->id)->where('date_at','>=',$startAt)->where('date_at','<=',$endAt)->get();
+
+        return response()->json(['code' => 0,'data' => $data]);
     }
 
     /**
