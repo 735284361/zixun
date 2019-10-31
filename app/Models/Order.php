@@ -42,9 +42,10 @@ class Order extends Model
     // 获取订单号
     public function getOrderNo($pre)
     {
-        $data = $this->select('select CreateOrderNo("'.$pre.'",8) as order_no limit 1');
-        $data = json_decode($data,true);
-        return $data[0]['order_no'];
+        $data = DB::select('select CreateOrderNo("'.$pre.'",8) as order_no limit 1');
+//        $data = json_decode($data,true);
+//        $data = DB::raw(CreateOrderNo($pre,8));
+        return $data[0]->order_no;
     }
 
     public function status($ind = null) {

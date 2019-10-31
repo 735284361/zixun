@@ -15,6 +15,8 @@ class UsersSub extends Authenticatable
     // 主键
     protected $primaryKey = 'open_id';
 
+    public $incrementing=false;
+
     protected $guarded = [];
 
     public function likes()

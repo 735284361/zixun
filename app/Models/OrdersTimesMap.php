@@ -10,5 +10,8 @@ class OrdersTimesMap extends Model
 
     protected $table = 'zx_orders_times_map';
 
-    // 和
+    protected $guarded = [];
+
+    //
+
 }

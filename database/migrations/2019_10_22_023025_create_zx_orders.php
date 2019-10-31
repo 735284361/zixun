@@ -18,11 +18,11 @@ class CreateZxOrders extends Migration
             $table->integer('user_id');
             $table->integer('teacher_id');
             $table->string('order_no')->comment('订单号');
-            $table->double('price')->comment('订单金额');
+            $table->double('total_fee',10,2)->comment('订单金额');
             $table->integer('start_at')->comment('预约开始时间');
             $table->integer('end_at')->comment('预约截止时间');
             $table->integer('time_len')->comment('预约时长');
-            $table->text('subject')->comment('咨询主题');
+            $table->text('subject')->nullable()->comment('咨询主题');
             $table->integer('status')->default(10)->comment('订单状态 10-待付款；20-已付款；');
             $table->timestamps();
         });

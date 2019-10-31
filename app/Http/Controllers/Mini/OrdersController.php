@@ -5,9 +5,11 @@ namespace App\Http\Controllers\Mini;
 use App\Http\Requests\OrderRequest;
 use App\Jobs\CloseOrder;
 use App\Models\Order;
+use App\Models\Teacher;
 use App\Services\OrdersService;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Redis;
@@ -48,6 +50,9 @@ class OrdersController extends Controller
 //        $res = CloseOrder::dispatch($order)->delay(now()->addMinute(1));
 //        return response()->json($res);
 
-        $this->orderService->addOrder($request->all());
+        $teacher = Teacher::where('id',$request->teacher_id)->first();
+        // 判断是否有下单权限
+        $this->authorize('order',$teacher);
+        return $this->orderService->addOrder($request->all());
     }
 }

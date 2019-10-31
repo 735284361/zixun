@@ -147,6 +147,7 @@ class TeachersController extends Controller
     }
 
     /**
+     * 获取讲师认证信息
      * @return \Illuminate\Http\JsonResponse
      */
     public function myTeacherInfo()
