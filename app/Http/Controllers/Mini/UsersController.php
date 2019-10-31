@@ -17,7 +17,7 @@ class UsersController extends Controller
      */
     public function myAccount()
     {
-        $account = UsersAccount::where('user_id',auth('api')->id())->first(['account']);
+        $account = UsersAccount::where('user_id',auth('api')->id())->first(['account'])->toArray();
         return $account ? $account : $arr['account'] = 0;
     }
 }
