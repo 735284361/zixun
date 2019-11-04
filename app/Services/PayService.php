@@ -40,7 +40,7 @@ class PayService
         } else {
             $jssdk = $payment->jssdk;
 
-            DB::table('zx_pay_log')->create(['order_no' => $orderNo,'prepay_id' => $result['prepay_id']]);
+            DB::table('zx_pay_log')->insert(['order_no' => $orderNo,'prepay_id' => $result['prepay_id']]);
             return $jssdk->bridgeConfig($result['prepay_id'],false);
         }
     }
