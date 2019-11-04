@@ -2,20 +2,21 @@
 
 namespace App\Services;
 
+use App\Jobs\CloseOrder;
 use App\Models\Order;
-use App\Models\OrdersTimesMap;
 use App\Models\Teacher;
 use App\Models\TeachersTime;
 use App\Models\UsersSub;
-use App\User;
 use Illuminate\Support\Facades\DB;
 
 class OrdersService
 {
 
-    public function getOrderNo($pre)
-    {
+    protected $payService;
 
+    public function __construct()
+    {
+        $this->payService = new PayService();
     }
 
     public function addOrder($data)
@@ -90,32 +91,19 @@ class OrdersService
         }
         $orderTimeRes = $order->orderTimes()->insert($timeArr);
 
-        $payInfo = $this->callPay($orderNo,$totalFee);
+        $payInfo = $this->payService->getPayParams($orderNo, $totalFee);
 
-        if ($orderRes && $timeRes && $orderTimeRes && $payInfo['return_code'] == 'SUCCESS') {
+
+//        $order = Order::where('id',3)->first();
+
+//        $res = CloseOrder::dispatch($order)->delay(now()->addMinute(1));
+
+        if ($orderRes && $timeRes && $orderTimeRes) {
             DB::commit();
-            return ['code' => 0,'msg' => '订单成功'];
+            return ['code' => 0,'msg' => '订单成功','data' => $payInfo];
         } else {
             DB::rollBack();
             return ['code' => 1,'msg' => '订单失败'];
         }
-    }
-
-    private function callPay($orderNo, $totalFee)
-    {
-        $app = \EasyWeChat::payment();
-
-        $user = UsersSub::where('uid',auth('api')->id())->where('since_from',USER_SINCE_FROM_ZIXUN)->first()->toArray();
-        $openId = $user['open_id'];
-        $result = $app->order->unify([
-            'body' => '咨询服务',
-            'out_trade_no' => $orderNo,
-            'total_fee' => $totalFee,
-            'spbill_create_ip' => '', // 可选，如不传该参数，SDK 将会自动获取相应 IP 地址
-            'notify_url' => 'https://pay.weixin.qq.com/wxpay/pay.action', // 支付结果通知网址，如果不设置则会使用配置里的默认地址
-            'trade_type' => 'JSAPI', // 请对应换成你的支付方式对应的值类型
-            'openid' => $openId,
-        ]);
-        return $result;
     }
 }
