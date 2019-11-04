@@ -7,6 +7,7 @@ use App\Jobs\CloseOrder;
 use App\Models\Order;
 use App\Models\Teacher;
 use App\Services\OrdersService;
+use App\Services\PayService;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
@@ -31,10 +32,16 @@ class OrdersController extends Controller
 //        $data = Cache::get('ORDER_CONFIRM:3');
 //        return response()->json($data);
 
-        $key = 'time_id';
-        $value = [1,2,3,4];
-        $data = array_fill_keys($value,$key);
-        return array_flip($data);
+//        $key = 'time_id';
+//        $value = [1,2,3,4];
+//        $data = array_fill_keys($value,$key);
+//        return array_flip($data);
+
+        $orderNo = date('YmdHis').rand(100000,999999);
+        $payService = new PayService();
+
+        return $payService->getPayParams($orderNo,1);
+
     }
 
     public function getCache()

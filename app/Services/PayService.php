@@ -20,7 +20,7 @@ class PayService
      */
     public function getPayParams($orderNo, $totalFee, $body = null)
     {
-        $body == null ? 'HR百科互助社' : '';
+        $body == null ? $body = 'HR百科互助社' : '';
 
         $user = UsersSub::where('uid',auth('api')->id())->where('since_from',USER_SINCE_FROM_ZIXUN)->first()->toArray();
         $openId = $user['open_id'];
@@ -34,8 +34,12 @@ class PayService
             'openid' => $openId,
         ]);
 
-        $jssdk = $payment->jssdk;
-        return $jssdk->bridgeConfig($result['prepay_id'],false);
+        if ($result['return_code'] == 'FAIL') {
+            return $result;
+        } else {
+            $jssdk = $payment->jssdk;
+            return $jssdk->bridgeConfig($result['prepay_id'],false);
+        }
     }
 
     public function callback(Request $request)
