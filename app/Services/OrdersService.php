@@ -6,7 +6,6 @@ use App\Jobs\CloseOrder;
 use App\Models\Order;
 use App\Models\Teacher;
 use App\Models\TeachersTime;
-use App\Models\UsersSub;
 use Illuminate\Support\Facades\DB;
 
 class OrdersService
@@ -60,7 +59,7 @@ class OrdersService
         $timeLen = ceil(($endAt - $startAt) / 60);
 
         // 订单金额
-        $totalFee = 101;//$count * $teacher['price'];
+        $totalFee = 1;//$count * $teacher['price'];
 
         $order->user_id = auth('api')->id();
         $order->teacher_id = $data['teacher_id'];
@@ -90,15 +89,12 @@ class OrdersService
             $timeArr[] = $obj;
         }
         $orderTimeRes = $order->orderTimes()->insert($timeArr);
-
+        // 获取支付信息
         $payInfo = $this->payService->getPayParams($orderNo, $totalFee);
 
-
-//        $order = Order::where('id',3)->first();
-
-//        $res = CloseOrder::dispatch($order)->delay(now()->addMinute(1));
-
         if ($orderRes && $timeRes && $orderTimeRes) {
+            // 过期未支付，则取消订单任务
+            CloseOrder::dispatch($order);
             DB::commit();
             return ['code' => 0,'msg' => '订单成功','data' => $payInfo];
         } else {

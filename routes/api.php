@@ -61,7 +61,7 @@ Route::group(['prefix' => '/v1'], function () {
 
         Route::group(['prefix' => 'order'], function() {
             Route::post('post_order','Mini\OrdersController@postOrder');
-            Route::post('pay','Mini\OrdersController@test');
+            Route::get('test','Mini\OrdersController@test');
         });
     });
 });

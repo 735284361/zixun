@@ -6,8 +6,10 @@ use App\Http\Requests\OrderRequest;
 use App\Jobs\CloseOrder;
 use App\Models\Order;
 use App\Models\Teacher;
+use App\Models\TeachersTime;
 use App\Services\OrdersService;
 use App\Services\PayService;
+use App\Services\TempMsgService;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
@@ -28,19 +30,20 @@ class OrdersController extends Controller
 
     public function test()
     {
-//        Cache::store('redis')->put('ORDER_CONFIRM:3',3,5);
-//        $data = Cache::get('ORDER_CONFIRM:3');
-//        return response()->json($data);
+        $order = Order::find(61);
 
-//        $key = 'time_id';
-//        $value = [1,2,3,4];
-//        $data = array_fill_keys($value,$key);
-//        return array_flip($data);
+        TempMsgService::paySuccess($order);
 
-        $orderNo = date('YmdHis').rand(100000,999999);
-        $payService = new PayService();
+        // 将订单的 closed 字段标记为 true，即关闭订单
+//        $order->update(['status' => Order::ORDER_INVALID]);
+//        // 更新讲师时间状态
+//        $timeIdArr = $order->orderTimes()->get()->toArray();
+//        $timeIdArr = array_column($timeIdArr,'time_id');
+//        TeachersTime::whereIn('id',$timeIdArr)->update([
+//            'status' => TeachersTime::STATUS_TIMES_ENABLE
+//        ]);
 
-        return $payService->getPayParams($orderNo,1);
+//        CloseOrder::dispatch($order);
 
     }
 
@@ -52,11 +55,6 @@ class OrdersController extends Controller
 
     public function postOrder(OrderRequest $request)
     {
-//        $order = Order::where('id',3)->first();
-//
-//        $res = CloseOrder::dispatch($order)->delay(now()->addMinute(1));
-//        return response()->json($res);
-
         $teacher = Teacher::where('id',$request->teacher_id)->first();
         // 判断是否有下单权限
         $this->authorize('order',$teacher);
