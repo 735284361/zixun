@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Models\Order;
+use App\Models\PayLog;
 use App\Models\UsersSub;
 use Illuminate\Support\Facades\DB;
 
@@ -40,7 +41,7 @@ class PayService
         } else {
             $jssdk = $payment->jssdk;
 
-            DB::table('zx_pay_log')->insert(['order_no' => $orderNo,'prepay_id' => $result['prepay_id']]);
+            PayLog::insert(['order_no' => $orderNo,'prepay_id' => $result['prepay_id']]);
             return $jssdk->bridgeConfig($result['prepay_id'],false);
         }
     }
