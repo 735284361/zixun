@@ -6,6 +6,7 @@ use App\Models\Order;
 use App\Models\PayLog;
 use App\Models\UsersSub;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class PayService
 {

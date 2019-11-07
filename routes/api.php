@@ -31,12 +31,6 @@ Route::group(['prefix' => '/v1'], function () {
 
     // Tag 标签
     Route::get('tag/list','Mini\TagsController@lists'); // 列表
-
-
-    Route::get('test','Mini\OrdersController@test');
-    Route::get('getCache','Mini\OrdersController@getCache');
-    Route::get('jianting','Mini\OrdersController@jianting');
-    Route::get('postOrder','Mini\OrdersController@postOrder');
     /**
      * ****************************************
      * 登录验证
@@ -68,6 +62,14 @@ Route::group(['prefix' => '/v1'], function () {
             Route::get('bindAx','Mini\CallController@bindAx');
             Route::get('cancelAxBind','Mini\CallController@cancelAxBind');
         });
+    });
+
+    Route::group(['prefix' => '/pay'], function () {
+        Route::group(['middleware' => ['auth:api']], function() {
+            Route::any('/pay', 'Mini\PayController@pay');
+        });
+        Route::any('/callback', 'Mini\PayController@callback');
+//        Route::any('/refund', 'Mini\PayController@refund');
     });
 });
 
