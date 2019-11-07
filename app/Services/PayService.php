@@ -58,7 +58,7 @@ class PayService
             // 使用通知里的 "微信支付订单号" 或者 "商户订单号" 去自己的数据库找到订单
             $order = Order::where('order_no',$message['out_trade_no'])->first()->toArray();
 
-            if (!$order || $order->status == Order::ORDER_PAID) { // 如果订单不存在 或者 订单已经支付过了
+            if (!$order || $order['status'] == Order::ORDER_PAID) { // 如果订单不存在 或者 订单已经支付过了
                 return true; // 告诉微信，我已经处理完了，订单没找到，别再通知我了
             }
 
@@ -67,10 +67,10 @@ class PayService
             if ($message['return_code'] === 'SUCCESS') { // return_code 表示通信状态，不代表支付状态
                 if (array_get($message, 'result_code') === 'SUCCESS') {
                     // 用户是否支付成功
-                    $order->status = Order::ORDER_PAID;
+                    $order['status'] = Order::ORDER_PAID;
                 } elseif (array_get($message, 'result_code') === 'FAIL') {
                     // 用户支付失败
-                    $order->status = Order::ORDER_PAID_FAIL;
+                    $order['status'] = Order::ORDER_PAID_FAIL;
                 }
             } else {
                 return $fail('通信失败，请稍后再通知我');
