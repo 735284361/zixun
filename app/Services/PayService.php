@@ -80,7 +80,6 @@ class PayService
             $order->save(); // 保存订单
 
             // 发送支付成功消息
-
             TempMsgService::paySuccess($order);
 
             return true; // 返回处理完成

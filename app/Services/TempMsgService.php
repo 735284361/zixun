@@ -6,6 +6,7 @@ use App\Models\Order;
 use App\Models\PayLog;
 use App\Models\UsersSub;
 use App\Notifications\Test;
+use Illuminate\Support\Facades\Log;
 
 class TempMsgService
 {
@@ -24,21 +25,29 @@ class TempMsgService
         $startAt = date('Y-m-d H:i',$order['start_at']);
 
         // 通知系统
-        $order->notify(new Test($order));
+        try {
+            $order->notify(new Test($order));
+        } catch (Exception $e) {
+            Log::warning('通知消息发送失败：'.$e->getMessage());
+        }
 
-        return $app->template_message->send([
-            'touser' => $user['open_id'],
-            'template_id' => self::PAY_SUCCESS,
-            'page' => 'index',
-            'form_id' => $payLog['prepay_id'],
-            'data' => [
-                'keyword1' => $order['order_no'], // 订单编号
-                'keyword2' => '一对一咨询', // 订单内容
-                'keyword3' => $order['total_fee'], // 订单金额
-                'keyword4' => $startAt, // 开始时间
-                'keyword5' => $order['time_len'].'分钟', // 预计时长
-            ],
-        ]);
+        try {
+            $app->template_message->send([
+                'touser' => $user['open_id'],
+                'template_id' => self::PAY_SUCCESS,
+                'page' => 'index',
+                'form_id' => $payLog['prepay_id'],
+                'data' => [
+                    'keyword1' => $order['order_no'], // 订单编号
+                    'keyword2' => '一对一咨询', // 订单内容
+                    'keyword3' => $order['total_fee'], // 订单金额
+                    'keyword4' => $startAt, // 开始时间
+                    'keyword5' => $order['time_len'].'分钟', // 预计时长
+                ],
+            ]);
+        } catch (Exception $e) {
+            Log::warning('模板消息发送失败：'.$e->getMessage());
+        }
     }
 
 }
