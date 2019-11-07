@@ -13,7 +13,7 @@ class TempMsgService
 
     const PAY_SUCCESS = 'tN10Ow_Cxu2d90Y6DOYpkYMVLlO0JZFrc2tcLYWIJgU'; // 支付成功
 
-    public function paySuccess(Order $order)
+    public static function paySuccess(Order $order)
     {
         // 转换为数组对象
         $data = json_decode($order,true);
