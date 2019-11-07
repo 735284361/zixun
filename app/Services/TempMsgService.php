@@ -27,7 +27,7 @@ class TempMsgService
         // 通知系统
         try {
             $order->notify(new Test($order));
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             Log::warning('通知消息发送失败：'.$e->getMessage());
         }
 
@@ -45,7 +45,7 @@ class TempMsgService
                     'keyword5' => $order['time_len'].'分钟', // 预计时长
                 ],
             ]);
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             Log::warning('模板消息发送失败：'.$e->getMessage());
         }
     }
