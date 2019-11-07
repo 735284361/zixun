@@ -30,9 +30,9 @@ class OrdersController extends Controller
 
     public function test()
     {
-        $order = Order::find(61);
+        $order = Order::find(89);
 
-        TempMsgService::paySuccess($order);
+        return TempMsgService::paySuccess($order);
 
         // 将订单的 closed 字段标记为 true，即关闭订单
 //        $order->update(['status' => Order::ORDER_INVALID]);
@@ -53,6 +53,12 @@ class OrdersController extends Controller
         return response()->json($data);
     }
 
+    /**
+     * 提交订单
+     * @param OrderRequest $request
+     * @return array
+     * @throws \Illuminate\Auth\Access\AuthorizationException
+     */
     public function postOrder(OrderRequest $request)
     {
         $teacher = Teacher::where('id',$request->teacher_id)->first();

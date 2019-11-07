@@ -63,6 +63,11 @@ Route::group(['prefix' => '/v1'], function () {
             Route::post('post_order','Mini\OrdersController@postOrder');
             Route::get('test','Mini\OrdersController@test');
         });
+
+        Route::group(['prefix' => 'call'], function() {
+            Route::get('bindAx','Mini\CallController@bindAx');
+            Route::get('cancelAxBind','Mini\CallController@cancelAxBind');
+        });
     });
 });
 

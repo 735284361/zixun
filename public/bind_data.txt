@@ -1,0 +1,61 @@
+绑定请求数据：config("call.ax_call.key"){"origNum":17600296638,"privateNum":17160095983,"calleeNumDisplay":0}
+绑定结果：<html>
+<head><title>404 Not Found</title></head>
+<body bgcolor="white">
+<center><h1>404 Not Found</h1></center>
+<hr><center>openresty</center>
+</body>
+</html>
+
+绑定请求数据：config("call.ax_call.key"){"origNum":17600296638,"privateNum":17160095983,"calleeNumDisplay":0}
+绑定结果：<html>
+<head><title>404 Not Found</title></head>
+<body bgcolor="white">
+<center><h1>404 Not Found</h1></center>
+<hr><center>openresty</center>
+</body>
+</html>
+
+绑定请求数据：config("call.ax_call.key"){"origNum":17600296638,"privateNum":17160095983,"calleeNumDisplay":0}
+绑定结果：<html>
+<head><title>404 Not Found</title></head>
+<body bgcolor="white">
+<center><h1>404 Not Found</h1></center>
+<hr><center>openresty</center>
+</body>
+</html>
+
+绑定请求数据：config("call.ax_call.key"){"origNum":17600296638,"privateNum":17160095983,"calleeNumDisplay":0}
+绑定请求数据：config("call.ax_call.key"){"origNum":17600296638,"privateNum":17160095983,"calleeNumDisplay":0}
+绑定结果：{"resultcode":"1011001","resultdesc":"Account does not exist."}
+绑定请求数据：config("call.ax_call.key"){"origNum":17600296638,"privateNum":17160095983,"calleeNumDisplay":0}
+绑定结果：{"resultcode":"1011001","resultdesc":"Account does not exist."}
+绑定请求数据：config("call.ax_call.key"){"origNum":17600296638,"privateNum":17160095983,"calleeNumDisplay":0}
+绑定结果：{"resultcode":"1011001","resultdesc":"Account does not exist."}
+绑定请求数据：config("call.ax_call.key"){"origNum":"17600296638","privateNum":"17160095983","calleeNumDisplay":0}
+绑定结果：{"resultcode":"1011001","resultdesc":"Account does not exist."}
+绑定请求数据：config("call.ax_call.key"){"origNum":"17600296638","privateNum":"17160095983","calleeNumDisplay":0}
+绑定结果：{"resultcode":"1010003","resultdesc":"Invalid app_key."}
+绑定请求数据：config("call.ax_call.key"){"origNum":"17600296638","privateNum":"17160095983","calleeNumDisplay":0}
+绑定结果：{"resultcode":"1011001","resultdesc":"Account does not exist."}
+绑定请求数据：config("call.ax_call.key"){"origNum":"17600296638","privateNum":"17160095983","calleeNumDisplay":0}
+绑定请求数据：config("call.ax_call.key"){"origNum":"17600296638","privateNum":"1716009593","calleeNumDisplay":0}
+绑定结果：{"resultcode":"1011001","resultdesc":"Account does not exist."}
+绑定请求数据：{"origNum":"+8617600296638","privateNum":"+8617160095983","recordFlag":"true","recordHintTone":"001.wav","calleeNumDisplay":"0","preVoice":{"callerHintTone":"001.wav","calleeHintTone":"001.wav"},"maxDuration":"3","lastMinVoice":"001.wav"}
+绑定结果：{"resultcode":"1011005","resultdesc":"Resource has been applied."}
+绑定请求数据：{"origNum":"+8617600296638","privateNum":"+8617160095983","recordFlag":"true","recordHintTone":"001.wav","calleeNumDisplay":"0","preVoice":{"callerHintTone":"001.wav","calleeHintTone":"001.wav"},"maxDuration":"3","lastMinVoice":"001.wav"}
+绑定结果：{"resultcode":"1011005","resultdesc":"Resource has been applied."}
+绑定请求数据：{"origNum":"+8617600296638","privateNum":"+8617160095983","recordFlag":"true","recordHintTone":"001.wav","calleeNumDisplay":"0","preVoice":{"callerHintTone":"001.wav","calleeHintTone":"001.wav"},"maxDuration":3,"lastMinVoice":"001.wav"}
+绑定结果：{"resultcode":"1011005","resultdesc":"Resource has been applied."}
+绑定请求数据：{"origNum":"+8617600296639","privateNum":"+8617160095983","recordFlag":"true","recordHintTone":"001.wav","calleeNumDisplay":"0","preVoice":{"callerHintTone":"001.wav","calleeHintTone":"001.wav"},"maxDuration":3,"lastMinVoice":"001.wav"}
+绑定结果：{"resultcode":"1011005","resultdesc":"Resource has been applied."}
+绑定请求数据：{"origNum":"+8617600296639","privateNum":"+8617160095983","recordFlag":"true","recordHintTone":"001.wav","calleeNumDisplay":"0","preVoice":{"callerHintTone":"001.wav","calleeHintTone":"001.wav"},"maxDuration":3,"lastMinVoice":"001.wav"}
+绑定结果：{"resultcode":"1011005","resultdesc":"Resource has been applied."}
+绑定请求数据：{"origNum":"+8617600296639","privateNum":"+8617160095983","recordFlag":"true","recordHintTone":"001.wav","calleeNumDisplay":"0","preVoice":{"callerHintTone":"001.wav","calleeHintTone":"001.wav"},"maxDuration":3,"lastMinVoice":"001.wav"}
+绑定结果：{"origNum":"+8617600296639","resultcode":"0","subscriptionId":"c90e0d97-736d-4e22-8b07-f9a50a530cfb","privateNum":"+8617160095983","resultdesc":"Success"}
+绑定请求数据：{"origNum":"+8617600296639","privateNum":"+8617160095983","recordFlag":"true","recordHintTone":"001.wav","calleeNumDisplay":"0","preVoice":{"callerHintTone":"001.wav","calleeHintTone":"001.wav"},"maxDuration":3,"lastMinVoice":"001.wav"}
+绑定结果：{"resultcode":"1011005","resultdesc":"Resource has been applied."}
+绑定请求数据：{"origNum":"+8617600296639","privateNum":"+8617160095983","recordFlag":"true","recordHintTone":"001.wav","calleeNumDisplay":"0","preVoice":{"callerHintTone":"001.wav","calleeHintTone":"001.wav"},"maxDuration":3,"lastMinVoice":"001.wav"}
+绑定结果：{"origNum":"+8617600296639","resultcode":"0","subscriptionId":"bd48090f-2a2a-42ad-a86f-96b35e232382","privateNum":"+8617160095983","resultdesc":"Success"}
+绑定请求数据：{"origNum":"+8617600296639","privateNum":"+8617160095983","recordFlag":"true","recordHintTone":"001.wav","calleeNumDisplay":"0","preVoice":{"callerHintTone":"001.wav","calleeHintTone":"001.wav"},"maxDuration":3,"lastMinVoice":"001.wav"}
+绑定结果：{"origNum":"+8617600296639","resultcode":"0","subscriptionId":"46d77069-4e69-4c9b-aef7-d2243a8a4490","privateNum":"+8617160095983","resultdesc":"Success"}

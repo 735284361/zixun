@@ -40,8 +40,10 @@ class PayService
             return $result;
         } else {
             $jssdk = $payment->jssdk;
-
-            PayLog::insert(['order_no' => $orderNo,'prepay_id' => $result['prepay_id']]);
+            PayLog::updateOrCreate(
+                ['order_no' => $orderNo],
+                ['order_no' => $orderNo,'prepay_id' => $result['prepay_id']]
+            );
             return $jssdk->bridgeConfig($result['prepay_id'],false);
         }
     }
