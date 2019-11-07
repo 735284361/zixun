@@ -45,7 +45,7 @@ class MessageController extends Controller
     // 删除某条消息
     public function deleteMsg(Request $request)
     {
-        return Auth::user()->unreadNotifications->where('id', $request->get('id'))->delete();
+        return Auth::user()->notifications()->where('id', $request->get('id'))->delete();
     }
 
     // 删除所有消息
