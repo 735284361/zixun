@@ -3,14 +3,11 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\DB;
 
 class Order extends Model
 {
     //
-
-    use Notifiable;
 
     protected $table = 'zx_orders';
 
@@ -29,13 +26,13 @@ class Order extends Model
     // 订单评论
     public function orderEval()
     {
-        return $this->hasOne(OrderEval::class,'order_id','id');
+        return $this->belongsTo(OrderEval::class,'order_id','id');
     }
 
     // 获取用户信息
-    public function userInfo()
+    public function user()
     {
-        return $this->hasOne(\App\User::class,'uid','user_id');
+        return $this->belongsTo(\App\User::class,'uid','user_id');
     }
 
     // 订单和预订的时间关联
@@ -49,6 +46,12 @@ class Order extends Model
     {
         $data = DB::select('select CreateOrderNo("'.$pre.'",8) as order_no limit 1');
         return $data[0]->order_no;
+    }
+
+    // 关联的老师
+    public function teacher()
+    {
+        return $this->belongsTo(Teacher::class,'teacher_id','id');
     }
 
     // 获取订单状态

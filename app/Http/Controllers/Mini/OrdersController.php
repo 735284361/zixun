@@ -6,9 +6,12 @@ use App\Http\Requests\OrderRequest;
 use App\Models\Order;
 use App\Models\Teacher;
 use App\Notifications\Test;
+use App\Services\MessageService;
 use App\Services\OrdersService;
 use App\Services\TempMsgService;
 use App\Http\Controllers\Controller;
+use App\User;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
 
 class OrdersController extends Controller
@@ -26,9 +29,19 @@ class OrdersController extends Controller
     public function test()
     {
 
-        $order = Order::find(89);
+//        $user = Auth::user();
+        $user  = User::find(170038);
 
-        return $order->notify(new Test());
+        foreach ($user->notifications as $notification) {
+            echo snake_case(class_basename($notification->type))."<br>";
+        }
+
+//        $order = Order::find(102);
+//
+//
+//        return MessageService::paySuccessMsg($order);
+
+//        return $order->notify(new Test());
 
 
 //

@@ -35,14 +35,11 @@ class CloseOrder implements ShouldQueue
     {
         // 判断对应的订单是否已经被支付
         // 如果已经支付则不需要关闭订单，直接退出
-        Log::warning('start');
         if ($this->order->status != Order::ORDER_PENDING) {
             return;
         }
         // 通过事务执行 sql
-        Log::warning('continue');
         \DB::transaction(function() {
-            Log::warning('continue1');
             // 将订单的 closed 字段标记为 true，即关闭订单
             $this->order->update(['status' => Order::ORDER_INVALID]);
             // 更新讲师时间状态

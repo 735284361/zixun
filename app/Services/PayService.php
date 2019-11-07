@@ -5,7 +5,6 @@ namespace App\Services;
 use App\Models\Order;
 use App\Models\PayLog;
 use App\Models\UsersSub;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
 class PayService
@@ -79,8 +78,8 @@ class PayService
 
             $order->save(); // 保存订单
 
-            // 发送支付成功消息
-            TempMsgService::paySuccess($order);
+            // 进入消息发送系统
+            MessageService::paySuccessMsg($order);
 
             return true; // 返回处理完成
         });

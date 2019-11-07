@@ -7,21 +7,21 @@ use Illuminate\Notifications\Notification;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 
-class Test extends Notification implements ShouldQueue
+class OrderPaySuccess extends Notification
 {
     use Queueable;
 
-    public $invoice;
+    public $order;
 
     /**
      * Create a new notification instance.
      *
      * @return void
      */
-    public function __construct($invoice)
+    public function __construct($order)
     {
         //
-        $this->invoice = $invoice;
+        $this->order = $order;
     }
 
     /**
@@ -32,7 +32,6 @@ class Test extends Notification implements ShouldQueue
      */
     public function via($notifiable)
     {
-//        return ['mail'];
         return ['database'];
     }
 
@@ -44,10 +43,10 @@ class Test extends Notification implements ShouldQueue
      */
     public function toMail($notifiable)
     {
-//        return (new MailMessage)
-//                    ->line('The introduction to the notification.')
-//                    ->action('Notification Action', url('/'))
-//                    ->line('Thank you for using our application!');
+        return (new MailMessage)
+                    ->line('The introduction to the notification.')
+                    ->action('Notification Action', url('/'))
+                    ->line('Thank you for using our application!');
     }
 
     /**
@@ -59,8 +58,8 @@ class Test extends Notification implements ShouldQueue
     public function toArray($notifiable)
     {
         return [
-            'invoice_id' => $this->invoice->id,
-            'amount' => $this->invoice->amount,
+            //
+            'order_no' => $this->order->order_no
         ];
     }
 }

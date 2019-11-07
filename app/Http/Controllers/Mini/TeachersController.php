@@ -59,7 +59,7 @@ class TeachersController extends Controller
         // 咨询历史
         $orders = Order::where('teacher_id',$id)->where('subject','!=',null)
             ->where('status',Order::ORDER_COMPLETED)
-            ->with(['userInfo' => function($query) {
+            ->with(['user' => function($query) {
                 $query->select(['uid','username','head_image']);
             }])->get();
         $data->orders = $orders;

@@ -5,7 +5,6 @@ namespace App\Services;
 use App\Models\Order;
 use App\Models\PayLog;
 use App\Models\UsersSub;
-use App\Notifications\Test;
 use Illuminate\Support\Facades\Log;
 
 class TempMsgService
@@ -23,13 +22,6 @@ class TempMsgService
         $app = \EasyWeChat::miniProgram();
 
         $startAt = date('Y-m-d H:i',$data['start_at']);
-
-        // 通知系统
-        try {
-            $order->notify(new Test($order));
-        } catch (\Exception $e) {
-            Log::warning('通知消息发送失败：'.$e->getMessage());
-        }
 
         try {
             $app->template_message->send([

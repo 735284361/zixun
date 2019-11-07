@@ -22,6 +22,7 @@ Route::get('/wechat/register', 'Mini\WeChatController@register');
 
 //前端小程序拿到的地址：https://域名/api/v1/自己写的接口
 Route::group(['prefix' => '/v1'], function () {
+
     // 讲师接口
     Route::get('/teacher/list', 'Mini\TeachersController@lists'); // 列表
     Route::get('/teacher/detail', 'Mini\TeachersController@detail'); // 详情
@@ -56,6 +57,18 @@ Route::group(['prefix' => '/v1'], function () {
         Route::group(['prefix' => 'order'], function() {
             Route::post('post_order','Mini\OrdersController@postOrder');
             Route::get('test','Mini\OrdersController@test');
+        });
+
+        // 消息通知
+        Route::group(['prefix' => 'message'], function() {
+            Route::get('list','Mini\MessageController@lists');
+            Route::get('markAsRead','Mini\MessageController@markAsRead');
+            Route::get('markAsReadForAll','Mini\MessageController@markAsReadForAll');
+            Route::get('unreadCount','Mini\MessageController@unreadCount');
+            Route::get('markAsRead','Mini\MessageController@markAsRead');
+            Route::get('markAsReadForAll','Mini\MessageController@markAsReadForAll');
+            Route::get('deleteMsg','Mini\MessageController@deleteMsg');
+            Route::get('delete','Mini\MessageController@delete');
         });
 
         Route::group(['prefix' => 'call'], function() {
