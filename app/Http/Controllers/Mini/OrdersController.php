@@ -25,41 +25,6 @@ class OrdersController extends Controller
         $this->orderService = new OrdersService();
     }
 
-
-    public function test()
-    {
-
-//        $user = Auth::user();
-        $user  = User::find(170038);
-
-        foreach ($user->notifications as $notification) {
-            echo snake_case(class_basename($notification->type))."<br>";
-        }
-
-//        $order = Order::find(102);
-//
-//
-//        return MessageService::paySuccessMsg($order);
-
-//        return $order->notify(new Test());
-
-
-//
-//        return TempMsgService::paySuccess($order);
-
-        // 将订单的 closed 字段标记为 true，即关闭订单
-//        $order->update(['status' => Order::ORDER_INVALID]);
-//        // 更新讲师时间状态
-//        $timeIdArr = $order->orderTimes()->get()->toArray();
-//        $timeIdArr = array_column($timeIdArr,'time_id');
-//        TeachersTime::whereIn('id',$timeIdArr)->update([
-//            'status' => TeachersTime::STATUS_TIMES_ENABLE
-//        ]);
-
-//        CloseOrder::dispatch($order);
-
-    }
-
     public function getCache()
     {
         $data = Cache::get();
@@ -79,4 +44,10 @@ class OrdersController extends Controller
         $this->authorize('order',$teacher);
         return $this->orderService->addOrder($request->all());
     }
+
+    public function order()
+    {
+
+    }
+
 }

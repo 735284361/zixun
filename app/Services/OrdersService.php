@@ -96,7 +96,7 @@ class OrdersService
             // 过期未支付，则取消订单任务
             CloseOrder::dispatch($order);
             DB::commit();
-            return ['code' => 0,'msg' => '订单成功','data' => $payInfo];
+            return ['code' => 0,'msg' => '订单成功','data' => $payInfo,'order_no' => $orderNo];
         } else {
             DB::rollBack();
             return ['code' => 1,'msg' => '订单失败'];
