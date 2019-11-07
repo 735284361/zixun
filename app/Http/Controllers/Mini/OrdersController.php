@@ -3,23 +3,18 @@
 namespace App\Http\Controllers\Mini;
 
 use App\Http\Requests\OrderRequest;
-use App\Jobs\CloseOrder;
 use App\Models\Order;
 use App\Models\Teacher;
-use App\Models\TeachersTime;
+use App\Notifications\Test;
 use App\Services\OrdersService;
-use App\Services\PayService;
 use App\Services\TempMsgService;
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Redis;
 
 class OrdersController extends Controller
 {
     //
+
     protected $orderService;
 
     public function __construct()
@@ -30,9 +25,14 @@ class OrdersController extends Controller
 
     public function test()
     {
+
         $order = Order::find(89);
 
-        return TempMsgService::paySuccess($order);
+        return $order->notify(new Test());
+
+
+//
+//        return TempMsgService::paySuccess($order);
 
         // 将订单的 closed 字段标记为 true，即关闭订单
 //        $order->update(['status' => Order::ORDER_INVALID]);

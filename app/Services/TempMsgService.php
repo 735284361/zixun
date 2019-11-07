@@ -5,14 +5,14 @@ namespace App\Services;
 use App\Models\Order;
 use App\Models\PayLog;
 use App\Models\UsersSub;
-use Illuminate\Support\Facades\DB;
+use App\Notifications\Test;
 
 class TempMsgService
 {
 
     const PAY_SUCCESS = 'tN10Ow_Cxu2d90Y6DOYpkYMVLlO0JZFrc2tcLYWIJgU'; // 支付成功
 
-    public static function paySuccess(Order $order)
+    public function paySuccess(Order $order)
     {
         // 转换为数组对象
         $order = json_decode($order,true);
@@ -22,6 +22,10 @@ class TempMsgService
         $app = \EasyWeChat::miniProgram();
 
         $startAt = date('Y-m-d H:i',$order['start_at']);
+
+        // 通知系统
+        $order->notify(new Test($order));
+
         return $app->template_message->send([
             'touser' => $user['open_id'],
             'template_id' => self::PAY_SUCCESS,
