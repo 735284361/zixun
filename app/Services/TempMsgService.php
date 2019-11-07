@@ -16,13 +16,13 @@ class TempMsgService
     public function paySuccess(Order $order)
     {
         // 转换为数组对象
-        $order = json_decode($order,true);
-        $user = UsersSub::where('uid',$order['user_id'])->where('since_from',USER_SINCE_FROM_ZIXUN)->first()->toArray();
-        $payLog = PayLog::where('order_no',$order['order_no'])->first()->toArray();
+        $data = json_decode($order,true);
+        $user = UsersSub::where('uid',$data['user_id'])->where('since_from',USER_SINCE_FROM_ZIXUN)->first()->toArray();
+        $payLog = PayLog::where('order_no',$data['order_no'])->first()->toArray();
 
         $app = \EasyWeChat::miniProgram();
 
-        $startAt = date('Y-m-d H:i',$order['start_at']);
+        $startAt = date('Y-m-d H:i',$data['start_at']);
 
         // 通知系统
         try {
@@ -38,11 +38,11 @@ class TempMsgService
                 'page' => 'index',
                 'form_id' => $payLog['prepay_id'],
                 'data' => [
-                    'keyword1' => $order['order_no'], // 订单编号
+                    'keyword1' => $data['order_no'], // 订单编号
                     'keyword2' => '一对一咨询', // 订单内容
-                    'keyword3' => $order['total_fee'], // 订单金额
+                    'keyword3' => $data['total_fee'], // 订单金额
                     'keyword4' => $startAt, // 开始时间
-                    'keyword5' => $order['time_len'].'分钟', // 预计时长
+                    'keyword5' => $data['time_len'].'分钟', // 预计时长
                 ],
             ]);
         } catch (\Exception $e) {
