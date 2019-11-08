@@ -7,6 +7,7 @@ use App\Notifications\OrderNeedTeacherConfirm;
 use App\Notifications\OrderPaySuccess;
 use App\User;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 class MessageService
 {
@@ -15,7 +16,8 @@ class MessageService
     {
         // 模板消息通知
         // 发送支付成功消息
-        TempMsgService::paySuccess($order);
+        $res = TempMsgService::paySuccess($order);
+        Log::warning($res);
 
         // 系统通知系统
         // 用户 订单支付成功
