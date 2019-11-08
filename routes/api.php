@@ -86,10 +86,9 @@ Route::group(['prefix' => '/v1'], function () {
     // 测试接口
     Route::group(['prefix' => '/test'], function () {
         Route::group(['middleware' => ['auth:api']], function() {
-//            Route::any('/', 'Mini\PayController@pay');
+//            Route::any('/test', 'Mini\TestController@test');
         });
         Route::any('/test', 'Mini\TestController@test');
-//        Route::any('/refund', 'Mini\PayController@refund');
     });
 
     Route::group(['prefix' => '/pay'], function () {

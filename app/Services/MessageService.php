@@ -19,13 +19,14 @@ class MessageService
 
         // 系统通知系统
         // 用户 订单支付成功
-        Auth::user()->notify(new OrderPaySuccess($order));
+        $user = User::where('uid',$order['user_id'])->first();
+        $user->notify(new OrderPaySuccess($order));
         // 讲师 订单需要确认通知
         $teacherId = $order['teacher_id'];
-        $user = User::whereHas('teacherInfo' , function($query) use ($teacherId) {
+        $teacher = User::whereHas('teacherInfo' , function($query) use ($teacherId) {
             $query->where('id',$teacherId)->select();
         })->first();
-        $user->notify(new OrderNeedTeacherConfirm($order));
+        $teacher->notify(new OrderNeedTeacherConfirm($order));
     }
 
 }

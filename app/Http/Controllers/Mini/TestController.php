@@ -13,7 +13,7 @@ class TestController extends Controller
 
     public function test()
     {
-        $order = Order::where('order_no','ZX201911080005')->first();
+        $order = Order::where('order_no','ZX201911080009')->first();
         MessageService::paySuccessMsg($order);
     }
 
