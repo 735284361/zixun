@@ -38,14 +38,15 @@ Route::group(['prefix' => '/v1'], function () {
      * ****************************************
      */
     Route::group(['middleware' => ['auth:api']], function () {
-        Route::post('userinfo/postUser','Mini\UserInfoController@postUser');
-        Route::post('profile','Mini\WeChatController@profile');
 
         // 用户相关接口
         Route::group(['prefix' => 'user'], function() {
             Route::get('account','Mini\UsersController@myAccount');
+            Route::get('user_info','Mini\UsersController@userInfo');
+            Route::post('post_user_info','Mini\UsersController@postUserInfo');
         });
 
+        // 讲师
         Route::group(['prefix' => 'teacher'], function() {
             Route::post('set_time','Mini\TeachersController@setTimes');
             Route::get('get_time','Mini\TeachersController@getTime');
@@ -54,6 +55,7 @@ Route::group(['prefix' => '/v1'], function () {
             Route::get('my_teacher_info','Mini\TeachersController@myTeacherInfo');
         });
 
+        // 订单
         Route::group(['prefix' => 'order'], function() {
             Route::post('post_order','Mini\OrdersController@postOrder');
             Route::get('order_info','Mini\OrdersController@orderInfo');
