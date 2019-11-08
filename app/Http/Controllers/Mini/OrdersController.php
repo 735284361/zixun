@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Mini;
 
 use App\Http\Requests\OrderRequest;
+use App\Models\Order;
 use App\Models\Teacher;
 use App\Services\OrdersService;
 use App\Http\Controllers\Controller;
@@ -66,6 +67,15 @@ class OrdersController extends Controller
         $this->validate($request,['order_no' => 'required']);
 
         return $this->orderService->orderInfo($request->order_no);
+    }
+
+    /**
+     * 订单列表
+     * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
+     */
+    public function orderList()
+    {
+        return Order::with('userInfo')->with('teacher')->where('user_id',auth('api')->id())->paginate(20);
     }
 
 }
