@@ -19,10 +19,7 @@ class TempMsgService
         $user = UsersSub::where('uid',$data['user_id'])->where('since_from',USER_SINCE_FROM_ZIXUN)->first()->toArray();
         $payLog = PayLog::where('order_no',$data['order_no'])->first()->toArray();
         $app = \EasyWeChat::miniProgram();
-
-        Log::warning($payLog);
-        Log::warning($payLog['prepay_id']);
-
+        
         $startAt = date('Y-m-d H:i',$data['start_at']);
 
         try {

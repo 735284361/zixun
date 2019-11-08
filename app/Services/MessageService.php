@@ -16,8 +16,7 @@ class MessageService
     {
         // 模板消息通知
         // 发送支付成功消息
-        $res = TempMsgService::paySuccess($order);
-        Log::warning($res);
+        TempMsgService::paySuccess($order);
 
         // 系统通知系统
         // 用户 订单支付成功

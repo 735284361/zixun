@@ -21,7 +21,6 @@ class PayController extends Controller
 
     public function callback(Request $request)
     {
-        Log::warning('callback');
         $this->payService->callback();
     }
 
