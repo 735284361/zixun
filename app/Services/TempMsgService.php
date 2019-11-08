@@ -18,13 +18,12 @@ class TempMsgService
         $data = json_decode($order,true);
         $user = UsersSub::where('uid',$data['user_id'])->where('since_from',USER_SINCE_FROM_ZIXUN)->first()->toArray();
         $payLog = PayLog::where('order_no',$data['order_no'])->first()->toArray();
-
         $app = \EasyWeChat::miniProgram();
 
         $startAt = date('Y-m-d H:i',$data['start_at']);
 
         try {
-            $app->template_message->send([
+            return $app->template_message->send([
                 'touser' => $user['open_id'],
                 'template_id' => self::PAY_SUCCESS,
                 'page' => 'index',
@@ -39,6 +38,7 @@ class TempMsgService
             ]);
         } catch (\Exception $e) {
             Log::warning('模板消息发送失败：'.$e->getMessage());
+            return false;
         }
     }
 
