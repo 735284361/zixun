@@ -75,7 +75,7 @@ class OrdersController extends Controller
      */
     public function orderList()
     {
-        return Order::with('userInfo')->with('teacher')->where('user_id',auth('api')->orderBy('id','desc')->id())->paginate(20);
+        return Order::orderBy('id','desc')->with('userInfo')->with('teacher')->where('user_id',auth('api')->id())->paginate(20);
     }
 
 }
