@@ -35,7 +35,13 @@ class CallController extends Controller
         // 判断该号码是否已经绑定
         $bindInfo = $this->callService->getAxBindInfo($originNum);
         if ($bindInfo['resultcode'] == 0) {
-            return $bindInfo;
+            return [
+                'resultcode' => 0,
+                'resultdesc' => 'Success',
+                'origNum' => $bindInfo['privateNumList'][0]['origNum'],
+                'privateNum' => $bindInfo['privateNumList'][0]['privateNum'],
+                'subscriptionId' => $bindInfo['privateNumList'][0]['subscriptionId'],
+            ];
         }
 
 //        // 判断订单状态
@@ -71,13 +77,10 @@ class CallController extends Controller
         return $this->callService->cancelAxBind($subscriptionId);
     }
 
-    public function getBindInfo()
+    public function getBindInfo(Request $request)
     {
-//        $origNum = "+8617600296638";
-        $origNum = '+8618210889173';
-
-        $response = $this->callService->getAxBindInfo($origNum);
-        dd($response);
+        $origNum = $request->phone;
+        return $this->callService->getAxBindInfo($origNum);
     }
 
 }

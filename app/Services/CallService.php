@@ -191,6 +191,7 @@ class CallService
      */
     public function getAxBindInfo($origNum)
     {
+        $origNum = self::setNum($origNum);
         // 请求URL参数
         $data = http_build_query([
             'origNum' => $origNum,
@@ -210,7 +211,6 @@ class CallService
                 'verify_peer_name' => false
             ] // 为防止因HTTPS证书认证失败造成API调用失败,需要先忽略证书信任问题
         ];
-
         try {
             $file=fopen('bind_data.txt', 'a'); //打开文件
             $response = file_get_contents($fullUrl, false, stream_context_create($context_options)); // 发送请求
