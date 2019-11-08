@@ -3,15 +3,10 @@
 namespace App\Http\Controllers\Mini;
 
 use App\Http\Requests\OrderRequest;
-use App\Models\Order;
 use App\Models\Teacher;
-use App\Notifications\Test;
-use App\Services\MessageService;
 use App\Services\OrdersService;
-use App\Services\TempMsgService;
 use App\Http\Controllers\Controller;
-use App\User;
-use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 
 class OrdersController extends Controller
@@ -45,9 +40,32 @@ class OrdersController extends Controller
         return $this->orderService->addOrder($request->all());
     }
 
-    public function order()
+    /**
+     * 重新支付订单
+     * @param Request $request
+     * @return array
+     * @throws \EasyWeChat\Kernel\Exceptions\InvalidArgumentException
+     * @throws \EasyWeChat\Kernel\Exceptions\InvalidConfigException
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws \Illuminate\Validation\ValidationException
+     */
+    public function repay(Request $request)
     {
+        $this->validate($request,['order_no' => 'required']);
+        return $this->orderService->repay($request->order_no);
+    }
 
+    /**
+     * 获取订单信息
+     * @param Request $request
+     * @return \App\Models\Order|\Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Eloquent\Model|object|null
+     * @throws \Illuminate\Validation\ValidationException
+     */
+    public function orderInfo(Request $request)
+    {
+        $this->validate($request,['order_no' => 'required']);
+
+        return $this->orderService->orderInfo($request->order_no);
     }
 
 }

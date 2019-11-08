@@ -35,10 +35,28 @@ class Order extends Model
         return $this->belongsTo(\App\User::class,'uid','user_id');
     }
 
+    // 用户信息
+    public function userInfo()
+    {
+        return $this->belongsTo(UsersInfo::class,'user_id','user_id');
+    }
+
     // 订单和预订的时间关联
     public function orderTimes()
     {
         return $this->hasMany(OrdersTimesMap::class,'order_id','id');
+    }
+
+    // 关联的老师
+    public function teacher()
+    {
+        return $this->belongsTo(Teacher::class,'teacher_id','id');
+    }
+
+    // 电话绑定信息
+    public function phoneBindInfo()
+    {
+        return $this->hasOne(BindRecord::class,'order_no','order_no');
     }
 
     // 获取订单号
@@ -46,12 +64,6 @@ class Order extends Model
     {
         $data = DB::select('select CreateOrderNo("'.$pre.'",8) as order_no limit 1');
         return $data[0]->order_no;
-    }
-
-    // 关联的老师
-    public function teacher()
-    {
-        return $this->belongsTo(Teacher::class,'teacher_id','id');
     }
 
     // 获取订单状态

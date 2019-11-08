@@ -36,15 +36,19 @@ class PayService
             'openid' => $openId,
         ]);
 
-        if ($result['return_code'] == 'FAIL') {
-            return $result;
+        if ($result['return_code'] == 'FAIL' || $result['result_code'] == 'FAIL') {
+            $data['code'] = 1;
+            $data['result']  = $result;
+            return $data;
         } else {
             $jssdk = $payment->jssdk;
             PayLog::updateOrCreate(
                 ['order_no' => $orderNo],
                 ['order_no' => $orderNo,'prepay_id' => $result['prepay_id']]
             );
-            return $jssdk->bridgeConfig($result['prepay_id'],false);
+            $data['code'] = 0;
+            $data['result'] = $jssdk->bridgeConfig($result['prepay_id'],false);
+            return $data;
         }
     }
 

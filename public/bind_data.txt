@@ -59,3 +59,64 @@
 绑定结果：{"origNum":"+8617600296639","resultcode":"0","subscriptionId":"bd48090f-2a2a-42ad-a86f-96b35e232382","privateNum":"+8617160095983","resultdesc":"Success"}
 绑定请求数据：{"origNum":"+8617600296639","privateNum":"+8617160095983","recordFlag":"true","recordHintTone":"001.wav","calleeNumDisplay":"0","preVoice":{"callerHintTone":"001.wav","calleeHintTone":"001.wav"},"maxDuration":3,"lastMinVoice":"001.wav"}
 绑定结果：{"origNum":"+8617600296639","resultcode":"0","subscriptionId":"46d77069-4e69-4c9b-aef7-d2243a8a4490","privateNum":"+8617160095983","resultdesc":"Success"}
+绑定请求数据：{"origNum":"+8617600296639","privateNum":"+8617160095983","recordFlag":"true","recordHintTone":"001.wav","calleeNumDisplay":"0","preVoice":{"callerHintTone":"001.wav","calleeHintTone":"001.wav"},"maxDuration":3,"lastMinVoice":"001.wav"}
+绑定结果：{"origNum":"+8617600296639","resultcode":"0","subscriptionId":"6491d9b8-4ab7-407d-a597-3a7ec7c670d7","privateNum":"+8617160095983","resultdesc":"Success"}
+绑定查询结果：{"resultcode":"1016001","resultdesc":"The record does not exist."}
+绑定查询结果：{"resultcode":"1016001","resultdesc":"The record does not exist."}
+绑定查询结果：{"resultcode":"1016001","resultdesc":"The record does not exist."}
+绑定查询结果：{"resultcode":"1016001","resultdesc":"The record does not exist."}
+绑定查询结果：{"resultcode":"1016001","resultdesc":"The record does not exist."}
+绑定请求数据：{"origNum":17600296638,"privateNum":"+8617160095983","recordFlag":"true","recordHintTone":"001.wav","calleeNumDisplay":"0","preVoice":{"callerHintTone":"001.wav","calleeHintTone":"001.wav"},"maxDuration":60,"lastMinVoice":"001.wav"}
+绑定结果：{"resultcode":"1011005","resultdesc":"Resource has been applied."}
+绑定请求数据：{"origNum":17600296638,"privateNum":"+8617160095983","recordFlag":"true","recordHintTone":"001.wav","calleeNumDisplay":"0","preVoice":{"callerHintTone":"001.wav","calleeHintTone":"001.wav"},"maxDuration":60,"lastMinVoice":"001.wav"}
+绑定结果：{"resultcode":"1011005","resultdesc":"Resource has been applied."}
+绑定查询结果：{"privateNumList":[{"lastMinVoice":"001.wav","calleeNumDisplay":"0","subscribeTime":"2019-11-07 21:11:09","origNum":"17600296638","privateNumType":"mobile-virtual","recordFlag":"true","subscriptionId":"9da84cfa-a61f-46d4-999a-0c6ab8453984","preVoice":{"calleeHintTone":"001.wav","callerHintTone":"001.wav"},"privateNum":"+8617160095983","recordHintTone":"001.wav","maxDuration":60}],"resultcode":"0","resultdesc":"Success"}
+绑定查询结果：{"resultcode":"1016001","resultdesc":"The record does not exist."}
+绑定查询结果：{"resultcode":"1016001","resultdesc":"The record does not exist."}
+绑定查询结果：{"resultcode":"1016001","resultdesc":"The record does not exist."}
+绑定查询结果：{"resultcode":"1016001","resultdesc":"The record does not exist."}
+绑定查询结果：{"resultcode":"1016001","resultdesc":"The record does not exist."}
+绑定查询结果：{"resultcode":"1016001","resultdesc":"The record does not exist."}
+绑定查询结果：{"resultcode":"1016001","resultdesc":"The record does not exist."}
+绑定查询结果：{"resultcode":"1016001","resultdesc":"The record does not exist."}
+绑定查询结果：{"resultcode":"1016001","resultdesc":"The record does not exist."}
+绑定查询结果：{"resultcode":"1016001","resultdesc":"The record does not exist."}
+绑定查询结果：{"resultcode":"1016001","resultdesc":"The record does not exist."}
+绑定查询结果：{"resultcode":"1016001","resultdesc":"The record does not exist."}
+绑定查询结果：{"resultcode":"1016001","resultdesc":"The record does not exist."}
+绑定查询结果：{"resultcode":"1016001","resultdesc":"The record does not exist."}
+绑定查询结果：{"privateNumList":[{"lastMinVoice":"001.wav","calleeNumDisplay":"0","subscribeTime":"2019-11-07 21:38:12","origNum":"+8617600296638","privateNumType":"mobile-virtual","recordFlag":"true","subscriptionId":"20850660-bf45-4494-a181-233a7ea460d1","preVoice":{"calleeHintTone":"001.wav","callerHintTone":"001.wav"},"privateNum":"+8617160095983","recordHintTone":"001.wav","maxDuration":60}],"resultcode":"0","resultdesc":"Success"}
+绑定查询结果：{"resultcode":"1016001","resultdesc":"The record does not exist."}
+绑定查询结果：{"resultcode":"1016001","resultdesc":"The record does not exist."}
+绑定查询结果：{"resultcode":"1016001","resultdesc":"The record does not exist."}
+绑定查询结果：{"resultcode":"1016001","resultdesc":"The record does not exist."}
+绑定查询结果：{"resultcode":"1016001","resultdesc":"The record does not exist."}
+绑定查询结果：{"resultcode":"1016001","resultdesc":"The record does not exist."}
+绑定查询结果：{"resultcode":"1016001","resultdesc":"The record does not exist."}
+绑定查询结果：{"resultcode":"1016001","resultdesc":"The record does not exist."}
+绑定查询结果：{"resultcode":"1016001","resultdesc":"The record does not exist."}
+绑定查询结果：{"resultcode":"1016001","resultdesc":"The record does not exist."}
+绑定查询结果：{"resultcode":"1016001","resultdesc":"The record does not exist."}
+绑定查询结果：{"resultcode":"1016001","resultdesc":"The record does not exist."}
+绑定查询结果：{"resultcode":"1016001","resultdesc":"The record does not exist."}
+绑定查询结果：{"resultcode":"1016001","resultdesc":"The record does not exist."}
+绑定查询结果：{"resultcode":"1016001","resultdesc":"The record does not exist."}
+绑定查询结果：{"resultcode":"1016001","resultdesc":"The record does not exist."}
+绑定查询结果：{"resultcode":"1016001","resultdesc":"The record does not exist."}
+绑定查询结果：{"resultcode":"1016001","resultdesc":"The record does not exist."}
+绑定查询结果：{"resultcode":"1016001","resultdesc":"The record does not exist."}
+绑定查询结果：{"resultcode":"1016001","resultdesc":"The record does not exist."}
+绑定查询结果：{"resultcode":"1016001","resultdesc":"The record does not exist."}
+绑定查询结果：{"resultcode":"1016001","resultdesc":"The record does not exist."}
+绑定查询结果：{"resultcode":"1016001","resultdesc":"The record does not exist."}
+绑定查询结果：{"resultcode":"1016001","resultdesc":"The record does not exist."}
+绑定查询结果：{"privateNumList":[{"lastMinVoice":"001.wav","calleeNumDisplay":"0","subscribeTime":"2019-11-07 22:08:51","origNum":"+8617600296638","privateNumType":"mobile-virtual","recordFlag":"true","subscriptionId":"db11f107-4cbe-4bc0-bc69-f0d86129a057","preVoice":{"calleeHintTone":"001.wav","callerHintTone":"001.wav"},"privateNum":"+8617081138405","recordHintTone":"001.wav","maxDuration":60}],"resultcode":"0","resultdesc":"Success"}
+绑定查询结果：{"resultcode":"1016001","resultdesc":"The record does not exist."}
+绑定查询结果：{"resultcode":"1016001","resultdesc":"The record does not exist."}
+绑定查询结果：{"resultcode":"1016001","resultdesc":"The record does not exist."}
+绑定查询结果：{"resultcode":"1016001","resultdesc":"The record does not exist."}
+绑定查询结果：{"resultcode":"1016001","resultdesc":"The record does not exist."}
+绑定查询结果：{"privateNumList":[{"lastMinVoice":"001.wav","calleeNumDisplay":"0","subscribeTime":"2019-11-07 22:30:08","origNum":"+8618210889173","privateNumType":"mobile-virtual","recordFlag":"true","subscriptionId":"d1b976a4-8de0-4378-9abd-69809dfd09ce","preVoice":{"calleeHintTone":"001.wav","callerHintTone":"001.wav"},"privateNum":"+8617160095983","recordHintTone":"001.wav","maxDuration":60}],"resultcode":"0","resultdesc":"Success"}
+绑定查询结果：{"privateNumList":[{"lastMinVoice":"001.wav","calleeNumDisplay":"0","subscribeTime":"2019-11-07 22:29:13","origNum":"+8617600296638","privateNumType":"mobile-virtual","recordFlag":"true","subscriptionId":"d23f670f-6687-4a00-882c-9bdd6228c2f7","preVoice":{"calleeHintTone":"001.wav","callerHintTone":"001.wav"},"privateNum":"+8617081138405","recordHintTone":"001.wav","maxDuration":60}],"resultcode":"0","resultdesc":"Success"}
+绑定查询结果：{"resultcode":"1016001","resultdesc":"The record does not exist."}
+绑定查询结果：{"resultcode":"1016001","resultdesc":"The record does not exist."}

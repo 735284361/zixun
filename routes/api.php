@@ -56,6 +56,8 @@ Route::group(['prefix' => '/v1'], function () {
 
         Route::group(['prefix' => 'order'], function() {
             Route::post('post_order','Mini\OrdersController@postOrder');
+            Route::get('order_info','Mini\OrdersController@orderInfo');
+            Route::get('repay','Mini\OrdersController@repay');
             Route::get('test','Mini\OrdersController@test');
         });
 
@@ -71,9 +73,11 @@ Route::group(['prefix' => '/v1'], function () {
             Route::get('delete','Mini\MessageController@delete');
         });
 
+        // 通话
         Route::group(['prefix' => 'call'], function() {
             Route::get('bindAx','Mini\CallController@bindAx');
             Route::get('cancelAxBind','Mini\CallController@cancelAxBind');
+            Route::get('getBindInfo','Mini\CallController@getBindInfo');
         });
     });
 

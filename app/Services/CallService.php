@@ -2,6 +2,9 @@
 
 namespace App\Services;
 
+use App\Models\BindRecord;
+use App\Models\PrivatePhone;
+
 class CallService
 {
 
@@ -30,10 +33,23 @@ class CallService
 //         'calleeHintTone' => $this->calleeHintTone
 //    );
 
-    public function bindAx($origNum, $privateNum, $maxDuration){
+    private static function setNum($num) {
+        return "+86".$num;
+    }
+
+    public function bindAx($origNum, $maxDuration){
         // 请求Headers
+        $origNum = self::setNum($origNum);
         $headers = $this->getHeader();
         // 请求Body,可按需删除选填参数
+
+        $privatePhone = PrivatePhone::where('status',PrivatePhone::STATUS_ENABLE)->first();
+
+        if (!$privatePhone) {
+            return ['resultcode' => 1,'msg' => '线路不足'];
+        }
+        $privatePhone = json_decode($privatePhone,true);
+        $privateNum = $privatePhone['phone'];
 
         $preVoice = [
             'callerHintTone' => $this->callerHintTone,
@@ -68,16 +84,18 @@ class CallService
         ];
 
         try {
-            $file=fopen('bind_data.txt', 'a'); //打开文件
-            fwrite($file, '绑定请求数据：' . $data . PHP_EOL); //绑定请求参数记录到本地文件,方便定位问题
             $response = file_get_contents($this->realUrl, false, stream_context_create($context_options)); // 发送请求
-            print_r($response . PHP_EOL); // 打印响应结果
-            fwrite($file, '绑定结果：' . $response . PHP_EOL); //绑定ID很重要,请记录到本地文件,方便后续修改绑定关系及解绑
+            $response = json_decode($response,true);
+            if ($response['resultcode'] == 0) {
+                $phone = PrivatePhone::where('phone',$privateNum)->first();
+                $phone->status = PrivatePhone::STATUS_USED;
+                $phone->save();
+            }
         } catch (Exception $e) {
             echo $e->getMessage();
         } finally {
-            fclose($file); //关闭文件
         }
+        return $response;
     }
 
     /**
@@ -86,15 +104,15 @@ class CallService
      * @param $privateNum
      * @return string
      */
-    public function cancelAxBind($origNum, $privateNum)
+    public function cancelAxBind($subscriptionId)
     {
         // 请求Headers
         $headers = $this->getHeader();
         // 请求URL参数
         $data = http_build_query([
-            'origNum' => $origNum,
-            'privateNum' => $privateNum
-//             'subscriptionId' => 'c90e0d97-736d-4e22-8b07-f9a50a530cfb'//$subscriptionId
+//            'origNum' => $origNum,
+//            'privateNum' => $privateNum
+             'subscriptionId' => $subscriptionId
         ]);
         // 完整请求地址
         $fullUrl = $this->realUrl . '?' . $data;
@@ -112,13 +130,18 @@ class CallService
         ];
 
         try {
-            print_r($data . PHP_EOL); // 打印请求数据
             $response = file_get_contents($fullUrl, false, stream_context_create($context_options)); // 发送请求
-            print_r($response . PHP_EOL); // 打印响应结果
-            return $response;
+            $response = json_decode($response, true);
+            if ($response['resultcode'] == 0) {
+                $privateNum = BindRecord::where('subscription_id',$subscriptionId)->first()->toArray();
+                $phone = PrivatePhone::where('phone',$privateNum['private_num'])->first();
+                $phone->status = PrivatePhone::STATUS_ENABLE;
+                $phone->save();
+            }
         } catch (Exception $e) {
             return $e->getMessage();
         }
+        return $response;
     }
 
     /**
@@ -197,7 +220,7 @@ class CallService
         } finally {
             fclose($file); //关闭文件
         }
-        return $response;
+        return json_decode($response,true);
     }
 
     /**

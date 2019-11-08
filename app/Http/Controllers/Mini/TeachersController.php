@@ -37,7 +37,7 @@ class TeachersController extends Controller
         $list = Teacher::with(['tags' => function($query) {
             // 老师标签
             return $query->select('tag');
-        }])->where('status',Teacher::STATUS_ENABLE)->where($map)->get();
+        }])->where('status',Teacher::STATUS_ENABLE)->where($map)->paginate(20);
         return $list;
     }
 

@@ -71,8 +71,6 @@ class OrdersService
         $order->subject = $data['subject'];
         $order->status = Order::ORDER_PENDING;
 
-        DB::beginTransaction();
-
         // 存储订单信息
         $orderRes = $order->save();
 
@@ -92,14 +90,49 @@ class OrdersService
         // 获取支付信息
         $payInfo = $this->payService->getPayParams($orderNo, $totalFee);
 
-        if ($orderRes && $timeRes && $orderTimeRes) {
+        if ($orderRes && $timeRes && $orderTimeRes && $payInfo['code'] == 0) {
             // 过期未支付，则取消订单任务
             CloseOrder::dispatch($order);
             DB::commit();
-            return ['code' => 0,'msg' => '订单成功','data' => $payInfo,'order_no' => $orderNo];
+            return ['code' => 0,'msg' => '成功','data' => $payInfo['result'],'order_no' => $orderNo];
         } else {
             DB::rollBack();
-            return ['code' => 1,'msg' => '订单失败'];
+            return ['code' => 1,'msg' => '失败','data' => $payInfo['result']];
         }
+    }
+
+    /**
+     * 重新支付订单
+     * @param $orderNo
+     * @return array
+     * @throws \EasyWeChat\Kernel\Exceptions\InvalidArgumentException
+     * @throws \EasyWeChat\Kernel\Exceptions\InvalidConfigException
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
+    public function repay($orderNo)
+    {
+        $order = Order::where('order_no',$orderNo)->first();
+
+        if ($order) {
+            $order = json_decode($order,true);
+            // 订单重新支付期限内 无需判断时间状态
+            // 获取支付信息
+            $payInfo = $this->payService->getPayParams($orderNo, $order['total_fee']);
+
+            if ($payInfo['code'] == 0) {
+                return ['code' => 0,'msg' => '成功','data' => $payInfo['result'],'order_no' => $orderNo];
+            }
+        }
+        return ['code' => 1,'msg' => '失败'];
+    }
+
+    /**
+     * 获取订单详情
+     * @param $orderNo
+     * @return Order|\Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Eloquent\Model|object|null
+     */
+    public function orderInfo($orderNo)
+    {
+        return Order::with('userInfo')->where('order_no',$orderNo)->first();
     }
 }
