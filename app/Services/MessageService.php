@@ -15,15 +15,16 @@ class MessageService
     {
         // 模板消息通知
         // 发送支付成功消息
-//        TempMsgService::paySuccess($order);
-
+        TempMsgService::paySuccess($order);
 
         // 系统通知系统
         // 用户 订单支付成功
         Auth::user()->notify(new OrderPaySuccess($order));
         // 讲师 订单需要确认通知
-        $teacher = $order->with('teacher')->first()->toArray();
-        $user = User::where('uid',$teacher['teacher']['user_id'])->first();
+        $teacherId = $order['teacher_id'];
+        $user = User::whereHas('teacherInfo' , function($query) use ($teacherId) {
+            $query->where('id',$teacherId)->select();
+        })->first();
         $user->notify(new OrderNeedTeacherConfirm($order));
     }
 
