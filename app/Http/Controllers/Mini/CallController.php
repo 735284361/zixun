@@ -28,10 +28,9 @@ class CallController extends Controller
 
         $orderNo = $request->order_no;
         // 获取订单信息
-        $order = Order::with('userInfo')
-            ->with('phoneBindInfo')->where('order_no',$orderNo)->first()->toArray();
+        $order = Order::with('teacher')->where('order_no',$orderNo)->first()->toArray();
 
-        $originNum = $order['user_info']['phone'];
+        $originNum = $order['teacher']['phone'];
         // 判断该号码是否已经绑定
         $bindInfo = $this->callService->getAxBindInfo($originNum);
         if ($bindInfo['resultcode'] == 0) {

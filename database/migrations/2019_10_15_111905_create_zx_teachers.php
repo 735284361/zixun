@@ -17,6 +17,7 @@ class CreateZxTeachers extends Migration
             $table->bigIncrements('id');
             $table->bigInteger('user_id');
             $table->string('name')->comment('老师姓名');
+            $table->string('phone')->comment('讲师电话');
             $table->string('title')->comment('老师Title');
             $table->string('list_img_url')->comment('列表图');
             $table->string('details_img_url')->comment('列表图');
