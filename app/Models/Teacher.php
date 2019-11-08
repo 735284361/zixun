@@ -12,6 +12,8 @@ class Teacher extends Model
 
     protected $guarded = [];
 
+    protected $hidden = ['phone'];
+
     // 老师状态
     const STATUS_ENABLE = 10; // 启用
     const STATUS_DISABLE = 20; // 禁用
