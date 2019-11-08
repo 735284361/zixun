@@ -115,6 +115,9 @@ class OrdersService
 
         if ($order) {
             $order = json_decode($order,true);
+            if ($order['status'] != Order::ORDER_PENDING) {
+                return ['code' => 1,'msg' => '订单失效'];
+            }
             // 订单重新支付期限内 无需判断时间状态
             // 获取支付信息
             $payInfo = $this->payService->getPayParams($orderNo, $order['total_fee']);
