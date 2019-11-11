@@ -44,10 +44,10 @@ class CallController extends Controller
         }
 
         // 用户电话 主叫电话
-        $calleeNum = $orderInfo['user_info']['phone'];
+        $originNum = $orderInfo['user_info']['phone'];
         // 讲师电话 被叫电话
         $teacherInfo = $order->teacher->makeVisible('phone')->toArray();
-        $originNum = $teacherInfo['phone'];
+        $calleeNum = $teacherInfo['phone'];
         // 最大通话时长，订单结束时间 - 当前时间
         $maxDuration = floor(($orderInfo['end_at'] - time()) / 60);
         // 判断该号码是否已经绑定
