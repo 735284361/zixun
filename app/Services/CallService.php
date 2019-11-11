@@ -3,7 +3,9 @@
 namespace App\Services;
 
 use App\Models\BindRecord;
+use App\Models\CallEventLog;
 use App\Models\PrivatePhone;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
 class CallService
@@ -167,30 +169,28 @@ class CallService
     public function onCallEvent($jsonBody)
     {
         $jsonArr = json_decode($jsonBody, true); //将通知消息解析为关联数组
+
+        // 将呼叫事件存入日志表
+        DB::enableQueryLog();
+        $eventLog = new CallEventLog();
+        $eventLog->content = $jsonBody;
+        $eventLog->save();
+
+        $sql = DB::getQueryLog();
+        dd($sql);
         $eventType = $jsonArr['eventType']; //通知事件类型
 
-        Log::info('AX_CALL:EventType error:'.$eventType);
         if (strcasecmp($eventType, 'fee') == 0) {
             return;
         }
 
         if (!array_key_exists('statusInfo', $jsonArr)) {
-            Log::info('AX_CALL:param error: no statusInfo.');
             return;
         }
         $statusInfo = $jsonArr['statusInfo']; //呼叫状态事件信息
 
         //callin：呼入事件
         if (strcasecmp($eventType, 'callin') == 0) {
-            /**
-             * Example: 此处以解析sessionId为例,请按需解析所需参数并自行实现相关处理
-             *
-             * 'timestamp': 呼叫事件发生时隐私保护通话平台的UNIX时间戳
-             * 'sessionId': 通话链路的标识ID
-             * 'caller': 主叫号码
-             * 'called': 被叫号码
-             * 'subscriptionId': 绑定关系ID
-             */
             if (array_key_exists('sessionId', $statusInfo)) {
                 print_r('sessionId: ' . $statusInfo['sessionId'] . PHP_EOL);
             }
@@ -198,15 +198,6 @@ class CallService
         }
         //callout：呼出事件
         if (strcasecmp($eventType, 'callout') == 0) {
-            /**
-             * Example: 此处以解析sessionId为例,请按需解析所需参数并自行实现相关处理
-             *
-             * 'timestamp': 呼叫事件发生时隐私保护通话平台的UNIX时间戳
-             * 'sessionId': 通话链路的标识ID
-             * 'caller': 主叫号码
-             * 'called': 被叫号码
-             * 'subscriptionId': 绑定关系ID
-             */
             if (array_key_exists('sessionId', $statusInfo)) {
                 print_r('sessionId: ' . $statusInfo['sessionId'] . PHP_EOL);
             }
@@ -214,15 +205,6 @@ class CallService
         }
         //alerting：振铃事件
         if (strcasecmp($eventType, 'alerting') == 0) {
-            /**
-             * Example: 此处以解析sessionId为例,请按需解析所需参数并自行实现相关处理
-             *
-             * 'timestamp': 呼叫事件发生时隐私保护通话平台的UNIX时间戳
-             * 'sessionId': 通话链路的标识ID
-             * 'caller': 主叫号码
-             * 'called': 被叫号码
-             * 'subscriptionId': 绑定关系ID
-             */
             if (array_key_exists('sessionId', $statusInfo)) {
                 print_r('sessionId: ' . $statusInfo['sessionId'] . PHP_EOL);
             }
@@ -230,15 +212,6 @@ class CallService
         }
         //answer：应答事件
         if (strcasecmp($eventType, 'answer') == 0) {
-            /**
-             * Example: 此处以解析sessionId为例,请按需解析所需参数并自行实现相关处理
-             *
-             * 'timestamp': 呼叫事件发生时隐私保护通话平台的UNIX时间戳
-             * 'sessionId': 通话链路的标识ID
-             * 'caller': 主叫号码
-             * 'called': 被叫号码
-             * 'subscriptionId': 绑定关系ID
-             */
             if (array_key_exists('sessionId', $statusInfo)) {
                 print_r('sessionId: ' . $statusInfo['sessionId'] . PHP_EOL);
             }
@@ -246,17 +219,6 @@ class CallService
         }
         //disconnect：挂机事件
         if (strcasecmp($eventType, 'disconnect') == 0) {
-            /**
-             * Example: 此处以解析sessionId为例,请按需解析所需参数并自行实现相关处理
-             *
-             * 'timestamp': 呼叫事件发生时隐私保护通话平台的UNIX时间戳
-             * 'sessionId': 通话链路的标识ID
-             * 'caller': 主叫号码
-             * 'called': 被叫号码
-             * 'stateCode': 通话挂机的原因值
-             * 'stateDesc': 通话挂机的原因值的描述
-             * 'subscriptionId': 绑定关系ID
-             */
             if (array_key_exists('sessionId', $statusInfo)) {
                 print_r('sessionId: ' . $statusInfo['sessionId'] . PHP_EOL);
             }

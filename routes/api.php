@@ -82,6 +82,7 @@ Route::group(['prefix' => '/v1'], function () {
             Route::get('cancelAxBind','Mini\CallController@cancelAxBind');
             Route::get('getBindInfo','Mini\CallController@getBindInfo');
             Route::get('temporaryCall','Mini\CallController@temporaryCall');
+            Route::get('onCallEvent','Mini\CallController@onCallEvent');
         });
     });
 
