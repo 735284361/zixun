@@ -171,13 +171,10 @@ class CallService
         $jsonArr = json_decode($jsonBody, true); //将通知消息解析为关联数组
 
         // 将呼叫事件存入日志表
-        DB::enableQueryLog();
         $eventLog = new CallEventLog();
         $eventLog->content = $jsonBody;
         $eventLog->save();
 
-        $sql = DB::getQueryLog();
-        dd($sql);
         $eventType = $jsonArr['eventType']; //通知事件类型
 
         if (strcasecmp($eventType, 'fee') == 0) {
