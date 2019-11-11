@@ -17,9 +17,12 @@ class TestController extends Controller
 //        $order = Order::where('order_no','ZX201911080025')->first();
 //        MessageService::paySuccessMsg($order);
 
-        $teacher = Teacher::where('id',1)->first();
-        $teacher = $teacher->toArray();
-        dd($teacher);
+//        $teacher = Teacher::where('id',1)->first();
+//        $teacher = $teacher->toArray();
+//        dd($teacher);
+
+        echo time();
     }
+
 
 }
