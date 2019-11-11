@@ -73,9 +73,14 @@ class OrdersController extends Controller
      * 订单列表
      * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
      */
-    public function orderList()
+    public function orderList(Request $request)
     {
-        return Order::orderBy('id','desc')->with('userInfo')->with('teacher')->where('user_id',auth('api')->id())->paginate(20);
+        $status = $request->input('status',0);
+
+        $status == 0 ? '' : $maps['status']  = $status;
+        $maps['user_id'] = auth('api')->id();
+
+        return Order::orderBy('id','desc')->with('userInfo')->with('teacher')->where($maps)->paginate(10);
     }
 
 }
