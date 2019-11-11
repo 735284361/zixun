@@ -55,15 +55,15 @@ class CallController extends Controller
         if ($bindInfo['resultcode'] == 0) { // 该手机号已经进行过绑定
             // 更新绑定时间
             $subscriptionId = $bindInfo['privateNumList'][0]['subscriptionId'];
-            $response = $this->callService->updateAxBind($subscriptionId);
+            $response = $this->callService->updateAxBind($subscriptionId,$maxDuration);
         } else { // 该手机号未绑定 新绑定
             $response =  $this->callService->bindAx($originNum,$maxDuration);
         }
         // 设置临时绑定信息
         if ($response['resultcode'] == 0) {
-            $response = $this->callService->temporaryCall($response[subscriptionId],$calleeNum);
+            $response = $this->callService->temporaryCall($response['subscriptionId'],$calleeNum);
         }
-
+        // 更新隐私小号使用状态
         if ($response['resultcode'] == 0) {
             BindRecord::updateOrCreate(['order_no' => $orderNo],[
                 'order_no' => $orderNo,

@@ -114,6 +114,7 @@ class CallService
         $fullUrl = $this->realUrl . '?' . $data;
         $response = $this->getResponse('DELETE',null, $fullUrl);
         // 更新小号使用状态
+        dd($response);
         if ($response['resultcode'] == 0) {
             $privateNum = BindRecord::where('subscription_id',$subscriptionId)->first()->toArray();
             $phone = PrivatePhone::where('phone',$privateNum['private_num'])->first();
@@ -131,12 +132,10 @@ class CallService
      */
     public function updateAxBind($subscriptionId, $maxDuration)
     {
-        $privateSms = 'true'; // 必填,修改该绑定关系是否支持短信功能
         // 请求Body,可按需删除选填参数
         $data = json_encode([
             'subscriptionId' => $subscriptionId,
-            'maxDuration' => $maxDuration,
-            'privateSms' => $privateSms
+            'maxDuration' => $maxDuration
         ]);
         $response = $this->getResponse('PUT',$data);
         return $response;
