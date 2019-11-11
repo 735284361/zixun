@@ -56,23 +56,27 @@ class CallController extends Controller
             // 更新绑定时间
             $subscriptionId = $bindInfo['privateNumList'][0]['subscriptionId'];
             $response = $this->callService->updateAxBind($subscriptionId,$maxDuration);
+            if ($response['resultcode'] == 0) {
+                $response['origNum'] = $bindInfo['privateNumList'][0]['origNum'];
+                $response['privateNum'] = $bindInfo['privateNumList'][0]['privateNum'];
+                $response['subscriptionId'] = $bindInfo['privateNumList'][0]['subscriptionId'];
+            }
         } else { // 该手机号未绑定 新绑定
             $response =  $this->callService->bindAx($originNum,$maxDuration);
         }
         // 设置临时绑定信息
         if ($response['resultcode'] == 0) {
-            $response = $this->callService->temporaryCall($response['subscriptionId'],$calleeNum);
+            $tempBind = $this->callService->temporaryCall($response['subscriptionId'],$calleeNum);
+            // 更新隐私小号使用状态
+            if ($tempBind['resultcode'] == 0) {
+                BindRecord::updateOrCreate(['order_no' => $orderNo],[
+                    'order_no' => $orderNo,
+                    'origin_num' => $response['origNum'],
+                    'private_num' => $response['privateNum'],
+                    'subscription_id' => $response['subscriptionId']
+                ]);
+            }
         }
-        // 更新隐私小号使用状态
-        if ($response['resultcode'] == 0) {
-            BindRecord::updateOrCreate(['order_no' => $orderNo],[
-                'order_no' => $orderNo,
-                'origin_num' => $response['origNum'],
-                'private_num' => $response['privateNum'],
-                'subscription_id' => $response['subscriptionId']
-            ]);
-        }
-
         return $response;
     }
 

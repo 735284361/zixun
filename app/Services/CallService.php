@@ -114,7 +114,6 @@ class CallService
         $fullUrl = $this->realUrl . '?' . $data;
         $response = $this->getResponse('DELETE',null, $fullUrl);
         // 更新小号使用状态
-        dd($response);
         if ($response['resultcode'] == 0) {
             $privateNum = BindRecord::where('subscription_id',$subscriptionId)->first()->toArray();
             $phone = PrivatePhone::where('phone',$privateNum['private_num'])->first();
