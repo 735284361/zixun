@@ -37,25 +37,24 @@ class CallService
         return "+86".$num;
     }
 
+    /**
+     * @param $origNum 需要绑定的 A手机号
+     * @param $maxDuration 最大通话时长
+     * @return array|bool|false|mixed|string
+     */
     public function bindAx($origNum, $maxDuration){
-        // 请求Headers
         $origNum = self::setNum($origNum);
-        $headers = $this->getHeader();
         // 请求Body,可按需删除选填参数
-
         $privatePhone = PrivatePhone::where('status',PrivatePhone::STATUS_ENABLE)->first();
-
         if (!$privatePhone) {
             return ['resultcode' => 1,'msg' => '线路不足'];
         }
         $privatePhone = json_decode($privatePhone,true);
         $privateNum = $privatePhone['phone'];
-
         $preVoice = [
             'callerHintTone' => $this->callerHintTone,
             'calleeHintTone' => $this->calleeHintTone
         ];
-
         $data = json_encode([
             'origNum' => $origNum,
             'privateNum' => $privateNum,
@@ -69,119 +68,78 @@ class CallService
             'maxDuration' => $maxDuration, // 单次通话进行的最长时间，单位为分钟
             'lastMinVoice' => $this->lastMinVoice
         ]);
-
-        $context_options = [
-            'http' => [
-                'method' => 'POST', // 请求方法为POST
-                'header' => $headers,
-                'content' => $data,
-                'ignore_errors' => true // 获取错误码,方便调测
-            ],
-            'ssl' => [
-                'verify_peer' => false,
-                'verify_peer_name' => false
-            ] // 为防止因HTTPS证书认证失败造成API调用失败,需要先忽略证书信任问题
-        ];
-
-        try {
-            $response = file_get_contents($this->realUrl, false, stream_context_create($context_options)); // 发送请求
-            $response = json_decode($response,true);
-            if ($response['resultcode'] == 0) {
-                $phone = PrivatePhone::where('phone',$privateNum)->first();
-                $phone->status = PrivatePhone::STATUS_USED;
-                $phone->save();
-            }
-        } catch (Exception $e) {
-            echo $e->getMessage();
-        } finally {
+        $response = $this->getResponse('POST',$data);
+        // 更新小号使用状态
+        if ($response['resultcode'] == 0) {
+            $phone = PrivatePhone::where('phone',$privateNum)->first();
+            $phone->status = PrivatePhone::STATUS_USED;
+            $phone->save();
         }
         return $response;
     }
 
     /**
+     * 临时通话接口
+     * @param $subscriptionId
+     * @param $calleeNum
+     * @param $duration
+     * @return bool|false|string
+     */
+    public function temporaryCall($subscriptionId, $calleeNum, $duration = 60)
+    {
+        $fullUrl = 'https://rtcapi.cn-north-1.myhuaweicloud.com:12543/rest/caas/privatenumber/calleenumber/v1.0';
+        // 请求Body,可按需删除选填参数
+        $data = json_encode([
+            'subscriptionId' => $subscriptionId,
+            'calleeNum' => $calleeNum,
+            'duration' => $duration // 临时被叫关系保持时间，单位为秒
+        ]);
+
+        $response = $this->getResponse('PUT', $data, $fullUrl);
+        return $response;
+    }
+
+    /**
      * 取消绑定
-     * @param $origNum
-     * @param $privateNum
-     * @return string
+     * @param $subscriptionId
+     * @return bool|false|mixed|string
      */
     public function cancelAxBind($subscriptionId)
     {
-        // 请求Headers
-        $headers = $this->getHeader();
         // 请求URL参数
         $data = http_build_query([
-//            'origNum' => $origNum,
-//            'privateNum' => $privateNum
              'subscriptionId' => $subscriptionId
         ]);
         // 完整请求地址
         $fullUrl = $this->realUrl . '?' . $data;
-
-        $context_options = [
-            'http' => [
-                'method' => 'DELETE', // 请求方法为DELETE
-                'header' => $headers,
-                'ignore_errors' => true // 获取错误码,方便调测
-            ],
-            'ssl' => [
-                'verify_peer' => false,
-                'verify_peer_name' => false
-            ] // 为防止因HTTPS证书认证失败造成API调用失败,需要先忽略证书信任问题
-        ];
-
-        try {
-            $response = file_get_contents($fullUrl, false, stream_context_create($context_options)); // 发送请求
-            $response = json_decode($response, true);
-            if ($response['resultcode'] == 0) {
-                $privateNum = BindRecord::where('subscription_id',$subscriptionId)->first()->toArray();
-                $phone = PrivatePhone::where('phone',$privateNum['private_num'])->first();
-                $phone->status = PrivatePhone::STATUS_ENABLE;
-                $phone->save();
-            }
-        } catch (Exception $e) {
-            return $e->getMessage();
+        $response = $this->getResponse('DELETE',null, $fullUrl);
+        // 更新小号使用状态
+        if ($response['resultcode'] == 0) {
+            $privateNum = BindRecord::where('subscription_id',$subscriptionId)->first()->toArray();
+            $phone = PrivatePhone::where('phone',$privateNum['private_num'])->first();
+            $phone->status = PrivatePhone::STATUS_ENABLE;
+            $phone->save();
         }
         return $response;
     }
 
     /**
      * 更新绑定
-     * @param $origNum
-     * @param $privateNum
+     * @param $subscriptionId
+     * @param $maxDuration
      * @return bool|false|string
      */
-    public function updateAxBind($origNum, $privateNum)
+    public function updateAxBind($subscriptionId, $maxDuration)
     {
-
         $privateSms = 'true'; // 必填,修改该绑定关系是否支持短信功能
-
         // 请求Body,可按需删除选填参数
         $data = json_encode([
-            'origNum' => $origNum,
-            'privateNum' => $privateNum,
+            'subscriptionId' => $subscriptionId,
+            'maxDuration' => $maxDuration,
             'privateSms' => $privateSms
         ]);
-
-        // 请求Headers
-        $headers = $this->getHeader();
-        $context_options = [
-            'http' => [
-                'method' => 'PUT', // 请求方法为PUT
-                'header' => $headers,
-                'content' => $data,
-                'ignore_errors' => true // 获取错误码,方便调测
-            ],
-            'ssl' => [
-                'verify_peer' => false,
-                'verify_peer_name' => false
-            ] // 为防止因HTTPS证书认证失败造成API调用失败,需要先忽略证书信任问题
-        ];
-
-        try {
-            return file_get_contents($this->realUrl, false, stream_context_create($context_options)); // 发送请求
-        } catch (Exception $e) {
-            return $e->getMessage();
-        }
+        $response = $this->getResponse('PUT',$data);
+        return $response;
     }
 
     /**
@@ -199,28 +157,8 @@ class CallService
         // 完整请求地址
         $fullUrl = $this->realUrl . '?' . $data;
 
-        $headers = $this->getHeader();
-        $context_options = [
-            'http' => [
-                'method' => 'GET', // 请求方法为GET
-                'header' => $headers,
-                'ignore_errors' => true // 获取错误码,方便调测
-            ],
-            'ssl' => [
-                'verify_peer' => false,
-                'verify_peer_name' => false
-            ] // 为防止因HTTPS证书认证失败造成API调用失败,需要先忽略证书信任问题
-        ];
-        try {
-            $file=fopen('bind_data.txt', 'a'); //打开文件
-            $response = file_get_contents($fullUrl, false, stream_context_create($context_options)); // 发送请求
-            fwrite($file, '绑定查询结果：' . $response . PHP_EOL); //查询结果,记录到本地文件
-        } catch (Exception $e) {
-            $response = $e->getMessage();
-        } finally {
-            fclose($file); //关闭文件
-        }
-        return json_decode($response,true);
+        $response = $this->getResponse('GET', $data, $fullUrl);
+        return $response;
     }
 
     /**
@@ -396,6 +334,10 @@ class CallService
         }
     }
 
+    /**
+     * 获取头部
+     * @return array
+     */
     private function getHeader()
     {
         return $headers = [
@@ -407,19 +349,67 @@ class CallService
     }
 
     /**
+     * @param $method
+     * @param $data
+     * @return array
+     */
+    private function getContextOptions($method, $data = null)
+    {
+        $headers = $this->getHeader();
+
+        $context_options = [
+            'http' => [
+                'method' => $method, // 请求方法为PUT
+                'header' => $headers,
+                'ignore_errors' => true // 获取错误码,方便调测
+            ],
+            'ssl' => [
+                'verify_peer' => false,
+                'verify_peer_name' => false
+            ] // 为防止因HTTPS证书认证失败造成API调用失败,需要先忽略证书信任问题
+        ];
+
+        $data == null ? '' : $context_options['http']['content'] = $data;
+
+        return $context_options;
+    }
+
+    /**
      * 构建X-WSSE值
      *
      * @param string $appKey
      * @param string $appSecret
      * @return string
      */
-    function buildWsseHeader($appKey, $appSecret) {
+    private function buildWsseHeader($appKey, $appSecret) {
         date_default_timezone_set("UTC");
         $Created = date('Y-m-d\TH:i:s\Z'); //Created
         $nonce = uniqid(); //Nonce
         $base64 = base64_encode(hash('sha256', ($nonce . $Created . $appSecret), TRUE)); //PasswordDigest
 
         return sprintf("UsernameToken Username=\"%s\",PasswordDigest=\"%s\",Nonce=\"%s\",Created=\"%s\"", $appKey, $base64, $nonce, $Created);
+    }
+
+    /**
+     * 获取响应结果
+     * @param $method
+     * @param null $data
+     * @param null $realUrl
+     * @return bool|false|string
+     */
+    private function getResponse($method, $data = null, $realUrl = null)
+    {
+        $realUrl == null ? $realUrl = $this->realUrl : '';
+
+        $context_options = $this->getContextOptions($method,$data);
+        try {
+            $response = file_get_contents($realUrl, false, stream_context_create($context_options)); // 发送请求
+            $response = json_decode($response,true);
+        } catch (Exception $e) {
+            $response['resultcode'] = 1;
+            $response['resultdesc'] = $e->getMessage();
+        }
+        return $response;
     }
 
 }
