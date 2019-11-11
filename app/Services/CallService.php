@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Models\BindRecord;
 use App\Models\PrivatePhone;
+use Illuminate\Support\Facades\Log;
 
 class CallService
 {
@@ -168,18 +169,17 @@ class CallService
         $jsonArr = json_decode($jsonBody, true); //将通知消息解析为关联数组
         $eventType = $jsonArr['eventType']; //通知事件类型
 
+        Log::info('AX_CALL:EventType error:'.$eventType);
         if (strcasecmp($eventType, 'fee') == 0) {
-            print_r('EventType error: ' . $eventType);
             return;
         }
 
         if (!array_key_exists('statusInfo', $jsonArr)) {
-            print_r('param error: no statusInfo.');
+            Log::info('AX_CALL:param error: no statusInfo.');
             return;
         }
         $statusInfo = $jsonArr['statusInfo']; //呼叫状态事件信息
 
-        print_r('eventType: ' . $eventType . PHP_EOL); //打印通知事件类型
         //callin：呼入事件
         if (strcasecmp($eventType, 'callin') == 0) {
             /**

@@ -15,7 +15,7 @@ class CallController extends Controller
     protected $callService;
 
     protected $origNum = '17600296638'; // A号码
-    protected $privateNum = '+8617160095983'; // X号码(隐私号码)
+    protected $privateNum = '17160095983'; // X号码(隐私号码)
 
     public function __construct()
     {
@@ -44,10 +44,10 @@ class CallController extends Controller
         }
 
         // 用户电话 主叫电话
-        $originNum = $orderInfo['user_info']['phone'];
+//        $originNum = $orderInfo['user_info']['phone'];
         // 讲师电话 被叫电话
         $teacherInfo = $order->teacher->makeVisible('phone')->toArray();
-        $calleeNum = $teacherInfo['phone'];
+        $originNum = $teacherInfo['phone'];
         // 最大通话时长，订单结束时间 - 当前时间
         $maxDuration = floor(($orderInfo['end_at'] - time()) / 60);
         // 判断该号码是否已经绑定
@@ -66,16 +66,16 @@ class CallController extends Controller
         }
         // 设置临时绑定信息
         if ($response['resultcode'] == 0) {
-            $tempBind = $this->callService->temporaryCall($response['subscriptionId'],$calleeNum);
+//            $tempBind = $this->callService->temporaryCall($response['subscriptionId'],$calleeNum);
             // 更新隐私小号使用状态
-            if ($tempBind['resultcode'] == 0) {
+//            if ($tempBind['resultcode'] == 0) {
                 BindRecord::updateOrCreate(['order_no' => $orderNo],[
                     'order_no' => $orderNo,
                     'origin_num' => $response['origNum'],
                     'private_num' => $response['privateNum'],
                     'subscription_id' => $response['subscriptionId']
                 ]);
-            }
+//            }
         }
         return $response;
     }
@@ -90,6 +90,29 @@ class CallController extends Controller
     {
         $origNum = $request->phone;
         return $this->callService->getAxBindInfo($origNum);
+    }
+
+    public function temporaryCall()
+    {
+        return $this->callService->temporaryCall('17600296638', '+8617160095983','17713267173');
+    }
+
+    public function onCallEvent()
+    {
+        $jsonBody = json_encode([
+            'eventType' => 'disconnect',
+            'statusInfo' => [
+                'sessionId' => '1200_1827_4294967295_20190124023003@callenabler246.huaweicaas.com',
+                'timestamp' => '2019-01-24 02:30:22',
+                'caller' => '+8613800000022',
+                'called' => '+8613866887021',
+                'stateCode' => 0,
+                'stateDesc' => 'The user releases the call.',
+                'subscriptionId' => '1d39eaef-9279-4d18-b806-72e43ab3f85c'
+            ]
+        ]);
+
+        $this->callService->onCallEvent($jsonBody);
     }
 
 }

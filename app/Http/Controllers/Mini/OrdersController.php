@@ -21,12 +21,6 @@ class OrdersController extends Controller
         $this->orderService = new OrdersService();
     }
 
-    public function getCache()
-    {
-        $data = Cache::get();
-        return response()->json($data);
-    }
-
     /**
      * 提交订单
      * @param OrderRequest $request
