@@ -15,13 +15,13 @@ class CreateZxCallEventRecordsTable extends Migration
     {
         Schema::create('zx_call_event_records', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->integer('event_type')->comment('事件类型');
-            $table->string('session_id');
-            $table->string('caller');
-            $table->string('called');
-            $table->string('state_code');
-            $table->string('state_desc');
-            $table->string('subscription_id');
+            $table->string('event_type')->comment('事件类型');
+            $table->string('session_id')->nullable();
+            $table->string('caller')->nullable();
+            $table->string('called')->nullable();
+            $table->string('state_code')->nullable();
+            $table->string('state_desc')->nullable();
+            $table->string('subscription_id')->nullable();
             $table->string('event_at')->comment('事件时间戳');
             $table->timestamps();
         });

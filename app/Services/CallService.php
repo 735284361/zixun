@@ -2,12 +2,6 @@
 
 namespace App\Services;
 
-use App\Models\BindRecord;
-use App\Models\CallEventLog;
-use App\Models\PrivatePhone;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
-
 class CallService
 {
 
@@ -111,12 +105,11 @@ class CallService
      * @param $maxDuration
      * @return bool|false|string
      */
-    public function updateAxBind($subscriptionId, $duration, $maxDuration)
+    public function updateAxBind($subscriptionId, $maxDuration)
     {
         // 请求Body,可按需删除选填参数
         $data = json_encode([
             'subscriptionId' => $subscriptionId,
-            'duration' => $duration,
             'maxDuration' => $maxDuration
         ]);
         $response = $this->getResponse('PUT',$data);
@@ -188,11 +181,6 @@ class CallService
     public function onCallEvent($jsonBody)
     {
         $jsonArr = json_decode($jsonBody, true); //将通知消息解析为关联数组
-
-        // 将呼叫事件存入日志表
-        $eventLog = new CallEventLog();
-        $eventLog->content = $jsonBody;
-        $eventLog->save();
 
         $eventType = $jsonArr['eventType']; //通知事件类型
 

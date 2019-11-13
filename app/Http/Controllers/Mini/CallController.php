@@ -12,13 +12,8 @@ use App\Http\Controllers\Controller;
 class CallController extends Controller
 {
     //
-
     protected $callService;
     protected $callRecordService;
-
-    protected $origNum = '17600296638'; // A号码
-    protected $privateNum = '17160095983'; // X号码(隐私号码)
-
     protected $relationNum = '+8617090000944';
 
     public function __construct()
@@ -27,6 +22,12 @@ class CallController extends Controller
         $this->callRecordService = new CallRecordService();
     }
 
+    /**
+     * 电话绑定
+     * @param Request $request
+     * @return array|bool|false|mixed|string
+     * @throws \Illuminate\Validation\ValidationException
+     */
     public function bindAx(Request $request)
     {
         $this->validate($request,['order_no' => 'required']);
@@ -44,7 +45,7 @@ class CallController extends Controller
 //        if (time() < $orderInfo['start_at']) {
 //            return ['resultcode' => 2,'resultdesc' => '预约未开始'];
 //        }
-//        if (time() > $orderInfo['end_at']) {
+//        if (time() > $orderInfo['end_at'] - 60) { // 提前一分钟绑定
 //            return ['resultcode' => 3,'resultdesc' => '预约已结束'];
 //        }
 
@@ -68,7 +69,7 @@ class CallController extends Controller
             if ($bindInfo['resultcode'] == 0) {
                 // 该手机号已经进行过绑定 则更新绑定
                 $bindType = 'updateBind';
-                $response = $this->callService->updateAxBind($subscriptionId, $duration, $maxDuration);
+                $response = $this->callService->updateAxBind($subscriptionId, $maxDuration);
                 $response['resultcode'] == 0 ? $response['relationNum'] = $relationNum : '';
             } else {
                 // 该绑定已失效 重新进行绑定
@@ -118,6 +119,8 @@ class CallController extends Controller
                 'subscriptionId' => '1d39eaef-9279-4d18-b806-72e43ab3f85c'
             ]
         ]);
+
+        $this->callRecordService->saveEventRecord($jsonBody);
 
         $this->callService->onCallEvent($jsonBody);
     }

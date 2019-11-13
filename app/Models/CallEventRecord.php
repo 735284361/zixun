@@ -8,6 +8,7 @@ class CallEventRecord extends Model
 {
     //
 
-    protected $table = 'zx_call_event_record';
+    protected $table = 'zx_call_event_records';
 
+    protected $guarded = [];
 }
