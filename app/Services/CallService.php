@@ -136,6 +136,11 @@ class CallService
         return $response;
     }
 
+    /**
+     * 获取绑定信息
+     * @param $relationNum
+     * @return bool|false|string
+     */
     public function getAxBindInfos($relationNum)
     {
         // 请求URL参数
@@ -179,6 +184,7 @@ class CallService
     /**
      * 呼叫事件通知接口
      * @param $jsonBody
+     * @return bool|void
      */
     public function onCallEvent($jsonBody)
     {
@@ -196,51 +202,18 @@ class CallService
         }
         $statusInfo = $jsonArr['statusInfo']; //呼叫状态事件信息
 
-        //callin：呼入事件
-        if (strcasecmp($eventType, 'callin') == 0) {
-            if (array_key_exists('sessionId', $statusInfo)) {
-                print_r('sessionId: ' . $statusInfo['sessionId'] . PHP_EOL);
-            }
-            return;
-        }
-        //callout：呼出事件
-        if (strcasecmp($eventType, 'callout') == 0) {
-            if (array_key_exists('sessionId', $statusInfo)) {
-                print_r('sessionId: ' . $statusInfo['sessionId'] . PHP_EOL);
-            }
-            return;
-        }
-        //alerting：振铃事件
-        if (strcasecmp($eventType, 'alerting') == 0) {
-            if (array_key_exists('sessionId', $statusInfo)) {
-                print_r('sessionId: ' . $statusInfo['sessionId'] . PHP_EOL);
-            }
-            return;
-        }
-        //answer：应答事件
-        if (strcasecmp($eventType, 'answer') == 0) {
-            if (array_key_exists('sessionId', $statusInfo)) {
-                print_r('sessionId: ' . $statusInfo['sessionId'] . PHP_EOL);
-            }
-            return;
-        }
-        //disconnect：挂机事件
-        if (strcasecmp($eventType, 'disconnect') == 0) {
-            if (array_key_exists('sessionId', $statusInfo)) {
-                print_r('sessionId: ' . $statusInfo['sessionId'] . PHP_EOL);
-            }
-            return;
-        }
+        $callRecordService = new CallRecordService();
+        return $callRecordService->saveEventRecord($eventType, $statusInfo);
     }
 
     /**
-    * 话单通知
-    * @desc 详细内容以接口文档为准
-    * @param jsonArr
-    */
+     * 话单通知
+     * @param $jsonBody
+     * @return bool|void
+     */
     function onFeeEvent($jsonBody) {
-//        $jsonArr = json_decode($jsonBody, true); //将通知消息解析为关联数组
-        $jsonArr = $jsonBody;//json_decode($jsonBody, true); //将通知消息解析为关联数组
+        $jsonArr = json_decode($jsonBody, true); //将通知消息解析为关联数组
+//        $jsonArr = $jsonBody; //将通知消息解析为关联数组
         $eventType = $jsonArr['eventType']; //通知事件类型
 
         if (strcasecmp($eventType, 'fee') != 0) {
@@ -252,21 +225,8 @@ class CallService
         }
         $feeLst = $jsonArr['feeLst']; //呼叫话单事件信息
         //短时间内有多个通话结束时隐私保护通话平台会将话单合并推送,每条消息最多携带50个话单
-        if (sizeof($feeLst) > 1) {
-            foreach ($feeLst as $loop){
-                Log::info($loop);
-                if (array_key_exists('sessionId', $loop)) {
-                    print_r('sessionId: ' . $loop['sessionId'] . PHP_EOL);
-                }
-            }
-        } else if(sizeof($feeLst) == 1) {
-            Log::info($feeLst);
-            if (array_key_exists('sessionId', $feeLst[0])) {
-                print_r('sessionId: ' . $feeLst[0]['sessionId'] . PHP_EOL);
-            }
-        } else {
-            print_r('feeLst error: no element.');
-        }
+        $recordService = new CallRecordService();
+        return $recordService->saveCallFeeRecord($eventType,$feeLst);
     }
 
     /**

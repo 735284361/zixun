@@ -57,7 +57,7 @@ class CallController extends Controller
         $relationNum = $this->relationNum;
         // 最大通话时长，订单结束时间 - 当前时间
         $maxDuration = floor(($orderInfo['end_at'] - time()) / 60);
-        $duration = $maxDuration * 60;
+        $duration = 60; // 每分钟失效 失效后重新绑定进行通话
         // 查询绑定信息
         // 一个订单只能对应一条绑定记录 如果存在则更新绑定
         $bindRecord = CallBindRecord::where('order_no',$orderNo)->first();
@@ -108,7 +108,6 @@ class CallController extends Controller
     public function onCallEvent(Request $request)
     {
         $jsonBody = $request->all();
-        $this->callRecordService->saveEventRecord($jsonBody);
         $this->callService->onCallEvent($jsonBody);
     }
 
@@ -117,6 +116,38 @@ class CallController extends Controller
 //        $jsonBody = json_encode([
 //            'eventType' => 'fee',
 //            'feeLst' => [
+//                [
+//                    'direction' => 1,
+//                    'spId' => 'linlingoo_omp',
+//                    'appKey' => 'V1Z96521zFr3vxe5N2A1UJ1sQ1WP',
+//                    'icid' => 'ba171f34e6953fcd751edc77127748f4.3757223714.337238282.9',
+//                    'bindNum' => '+8613800000022',
+//                    'sessionId' => '1200_1029_4294967295_20190123091514@callenabler246.huaweicaas.com',
+//                    'subscriptionId' => 'e97b2863-e7ad-4b4c-87c0-91b0171fe803',
+//                    'callerNum' => '+8613800000021',
+//                    'calleeNum' => '+8613800000022',
+//                    'fwdDisplayNum' => '+8613800000022',
+//                    'fwdDstNum' => '+8613866887021',
+//                    'callInTime' => '2019-01-23 09:15:14',
+//                    'fwdStartTime' => '2019-01-23 09:15:15',
+//                    'fwdAlertingTime' => '2019-01-23 09:15:21',
+//                    'fwdAnswerTime' => '2019-01-23 09:15:36',
+//                    'callEndTime' => '2019-01-23 09:16:41',
+//                    'fwdUnaswRsn' => 0,
+//                    'ulFailReason' => 0,
+//                    'sipStatusCode' => 0,
+//                    'callOutUnaswRsn' => 0,
+//                    'recordFlag' => 1,
+//                    'recordStartTime' => '2019-01-23 09:15:37',
+//                    'recordDomain' => 'ostor.huawei.com',
+//                    'recordBucketName' => 'sp-v1z96521zfr3vxe5n2a1uj1sq1wp',
+//                    'recordObjectName' => '19012309153712050118304.wav',
+//                    'ttsPlayTimes' => 0,
+//                    'ttsTransDuration' => 0,
+//                    'mptyId' => 'e97b2863-e7ad-4b4c-87c0-91b0171fe803',
+//                    'serviceType' => '004',
+//                    'hostName' => 'callenabler246.huaweicaas.com'
+//                ],
 //                [
 //                    'direction' => 1,
 //                    'spId' => 'linlingoo_omp',

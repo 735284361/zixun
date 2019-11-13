@@ -12,9 +12,22 @@ class CallBindRecord extends Model
 
     protected $guarded = [];
 
+    /**
+     * 绑定日志
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
     public function bindLogs()
     {
         return $this->hasMany(CallBindRecordLog::class,'bind_id','id');
+    }
+
+    /**
+     * 对应订单所产生的通信ID
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function subscription()
+    {
+        return $this->hasMany(CallSubscription::class,'bind_id','id');
     }
 
 }

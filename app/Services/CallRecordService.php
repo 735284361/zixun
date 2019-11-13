@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Models\CallBindRecord;
 use App\Models\CallBindRecordLog;
 use App\Models\CallEventRecord;
+use App\Models\CallFeeRecord;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Schema;
@@ -38,27 +39,23 @@ class CallRecordService
 
             $record = CallBindRecord::updateOrCreate(['order_no'=>$orderNo],$recordData);
             // 存日志
-            $record->bindLogs()->create(['content' => $data, 'type' => $bindType]);
+            $record->bindLogs()->create(['content' => $data, 'type' => $bindType ,'subscription_id' => $data['subscription_id']]);
+            $record->subscription()->updateOrCreate(['subscription_id'=>$data['subscription_id']],['subscription_id' => $data['subscription_id']]);
             return;
         } catch (\Exception $e) {
             Log::error($e->getMessage());
         }
     }
 
-    public function saveEventRecord($data)
+    /**
+     * 保存呼叫事件记录
+     * @param $eventType
+     * @param $statusInfo
+     * @return bool
+     */
+    public function saveEventRecord($eventType, $statusInfo)
     {
         try {
-//            $jsonArr = json_decode($data, true); //将通知消息解析为关联数组
-            $jsonArr = $data;
-            $eventType = $jsonArr['eventType']; //通知事件类型
-            if (strcasecmp($eventType, 'fee') == 0) {
-                return;
-            }
-            if (!array_key_exists('statusInfo', $jsonArr)) {
-                return;
-            }
-            $statusInfo = $jsonArr['statusInfo']; //呼叫状态事件信息
-
             $eventRecord['event_type'] = $eventType;
             $columns = Schema::getColumnListing('zx_call_event_records');
             foreach ($statusInfo as $k => $v) {
@@ -67,7 +64,41 @@ class CallRecordService
             }
             $event = new CallEventRecord($eventRecord);
             $event->save();
-            return;
+            return true;
+        } catch (\Exception $e) {
+            Log::error($e->getMessage());
+        }
+    }
+
+    /**
+     * 保存话单信息
+     * @param $eventType
+     * @param $feeLst
+     * @return bool
+     */
+    public function saveCallFeeRecord($eventType, $feeLst)
+    {
+        try {
+            $columns = Schema::getColumnListing('zx_call_fee_records');
+            foreach ($feeLst as $data){
+                $feeRecord['event_type'] = $eventType;
+                $feeRecord['content'] = json_encode($data);
+                foreach ($data as $k => $v) {
+                    $k = snake_case($k);
+                    in_array($k,$columns) ? $feeRecord[$k] = $v : '';
+                }
+
+                // 计算通话时长
+                if (array_key_exists('fwd_answer_time',$feeRecord) && array_key_exists('call_end_time',$feeRecord)) {
+                    $feeRecord['call_time_len'] = strtotime($feeRecord['call_end_time']) - strtotime($feeRecord['fwd_answer_time']);
+                }
+                $feeRecord['created_at'] = date('Y-m-d H:i:s',time());
+                $feeRecord['updated_at'] = date('Y-m-d H:i:s',time());
+                $list[] = $feeRecord;
+            }
+            $fee = new CallFeeRecord();
+            $fee->insert($list);
+            return true;
         } catch (\Exception $e) {
             Log::error($e->getMessage());
         }

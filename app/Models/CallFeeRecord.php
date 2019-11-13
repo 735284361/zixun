@@ -8,16 +8,17 @@ class CallFeeRecord extends Model
 {
     //
 
-    protected $table = 'zx_call_fee_record';
+    protected $table = 'zx_call_fee_records';
 
-    public function getDataAttribute($value)
+    protected $guarded = [];
+
+    public function getContentAttribute($value)
     {
         return json_decode($value,true);
     }
 
-    public function setDataAttribute($value)
+    public function setContentAttribute($value)
     {
-        $value = json_encode($value);
-        return $value;
+        $this->attributes['content'] = json_encode($value);
     }
 }
