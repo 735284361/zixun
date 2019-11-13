@@ -64,11 +64,8 @@ class CallRecordService
                 $k = snake_case($k);
                 in_array($k,$columns) ? $eventRecord[$k] = $v : '';
             }
-            DB::enableQueryLog();
             $event = new CallEventRecord($eventRecord);
             $event->save();
-            $sql = DB::getQueryLog();
-            dd($sql);
             return;
         } catch (\Exception $e) {
             Log::error($e->getMessage());
