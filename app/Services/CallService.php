@@ -111,13 +111,11 @@ class CallService
      * @param $maxDuration
      * @return bool|false|string
      */
-    public function updateAxBind($subscriptionId, $callerNum, $calleeNum, $duration, $maxDuration)
+    public function updateAxBind($subscriptionId, $duration, $maxDuration)
     {
         // 请求Body,可按需删除选填参数
         $data = json_encode([
             'subscriptionId' => $subscriptionId,
-            'callerNum' => $callerNum,
-            'calleeNum' => $calleeNum,
             'duration' => $duration,
             'maxDuration' => $maxDuration
         ]);

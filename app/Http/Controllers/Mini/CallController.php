@@ -68,7 +68,7 @@ class CallController extends Controller
             if ($bindInfo['resultcode'] == 0) {
                 // 该手机号已经进行过绑定 则更新绑定
                 $bindType = 'updateBind';
-                $response = $this->callService->updateAxBind($subscriptionId, $callerNum, $calleeNum, $duration, $maxDuration);
+                $response = $this->callService->updateAxBind($subscriptionId, $duration, $maxDuration);
                 $response['resultcode'] == 0 ? $response['relationNum'] = $relationNum : '';
             } else {
                 // 该绑定已失效 重新进行绑定
