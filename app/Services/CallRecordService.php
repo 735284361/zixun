@@ -49,7 +49,8 @@ class CallRecordService
     {
         Log::info($data);
         try {
-            $jsonArr = json_decode($data, true); //将通知消息解析为关联数组
+//            $jsonArr = json_decode($data, true); //将通知消息解析为关联数组
+            $jsonArr = $data;
             $eventType = $jsonArr['eventType']; //通知事件类型
             if (strcasecmp($eventType, 'fee') == 0) {
                 return;
