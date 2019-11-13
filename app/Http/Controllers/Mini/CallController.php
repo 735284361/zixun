@@ -105,23 +105,22 @@ class CallController extends Controller
         return $this->callService->getAxBindInfos($this->relationNum);
     }
 
-    public function onCallEvent()
+    public function onCallEvent(Request $request)
     {
-        $jsonBody = json_encode([
-            'eventType' => 'disconnect',
-            'statusInfo' => [
-                'sessionId' => '1200_1827_4294967295_20190124023003@callenabler246.huaweicaas.com',
-                'timestamp' => '2019-01-24 02:30:22',
-                'caller' => '+8613800000022',
-                'called' => '+8613866887021',
-                'stateCode' => 0,
-                'stateDesc' => 'The user releases the call.',
-                'subscriptionId' => '1d39eaef-9279-4d18-b806-72e43ab3f85c'
-            ]
-        ]);
-
+//        $jsonBody = json_encode([
+//            'eventType' => 'disconnect',
+//            'statusInfo' => [
+//                'sessionId' => '1200_1827_4294967295_20190124023003@callenabler246.huaweicaas.com',
+//                'timestamp' => '2019-01-24 02:30:22',
+//                'caller' => '+8613800000022',
+//                'called' => '+8613866887021',
+//                'stateCode' => 0,
+//                'stateDesc' => 'The user releases the call.',
+//                'subscriptionId' => '1d39eaef-9279-4d18-b806-72e43ab3f85c'
+//            ]
+//        ]);
+        $jsonBody = $request->all();
         $this->callRecordService->saveEventRecord($jsonBody);
-
         $this->callService->onCallEvent($jsonBody);
     }
 
