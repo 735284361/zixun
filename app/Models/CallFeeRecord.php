@@ -4,18 +4,18 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class CallEventLog extends Model
+class CallFeeRecord extends Model
 {
     //
 
-    protected $table = 'zx_call_event_logs';
+    protected $table = 'zx_call_fee_record';
 
-    public function getCallLogAttribute($value)
+    public function getDataAttribute($value)
     {
         return json_decode($value,true);
     }
 
-    public function setCallLogAttribute($value)
+    public function setDataAttribute($value)
     {
         $value = json_encode($value);
         return $value;
