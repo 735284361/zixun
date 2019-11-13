@@ -101,6 +101,6 @@ Route::group(['prefix' => '/v1'], function () {
 //        Route::any('/refund', 'Mini\PayController@refund');
     });
     //呼叫回调
-    Route::get('call/onCallEvent','Mini\CallController@onCallEvent');
+    Route::any('call/onCallEvent','Mini\CallController@onCallEvent');
 });
 
