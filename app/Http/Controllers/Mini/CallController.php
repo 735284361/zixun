@@ -8,6 +8,7 @@ use App\Services\CallRecordService;
 use App\Services\CallService;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Log;
 
 class CallController extends Controller
 {
@@ -120,6 +121,7 @@ class CallController extends Controller
 //            ]
 //        ]);
         $jsonBody = $request->all();
+        Log::info($jsonBody);
         $this->callRecordService->saveEventRecord($jsonBody);
         $this->callService->onCallEvent($jsonBody);
     }
