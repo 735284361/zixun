@@ -8,7 +8,6 @@ use App\Services\CallRecordService;
 use App\Services\CallService;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Log;
 
 class CallController extends Controller
 {

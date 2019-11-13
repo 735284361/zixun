@@ -47,7 +47,6 @@ class CallRecordService
 
     public function saveEventRecord($data)
     {
-        Log::info($data);
         try {
 //            $jsonArr = json_decode($data, true); //将通知消息解析为关联数组
             $jsonArr = $data;

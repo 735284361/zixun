@@ -239,7 +239,8 @@ class CallService
     * @param jsonArr
     */
     function onFeeEvent($jsonBody) {
-        $jsonArr = json_decode($jsonBody, true); //将通知消息解析为关联数组
+//        $jsonArr = json_decode($jsonBody, true); //将通知消息解析为关联数组
+        $jsonArr = $jsonBody;//json_decode($jsonBody, true); //将通知消息解析为关联数组
         $eventType = $jsonArr['eventType']; //通知事件类型
 
         if (strcasecmp($eventType, 'fee') != 0) {
