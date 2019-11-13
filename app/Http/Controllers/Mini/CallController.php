@@ -50,15 +50,13 @@ class CallController extends Controller
 
         // 用户电话 主叫电话
         $callerNum = $orderInfo['user_info']['phone'];
-//        $callerNum = '17800821483';
         // 讲师电话 被叫电话
         $teacherInfo = $order->teacher->makeVisible('phone')->toArray();
         $calleeNum = $teacherInfo['phone'];
-//        $calleeNum = '18903702868';
         $relationNum = $this->relationNum;
         // 最大通话时长，订单结束时间 - 当前时间
-        $maxDuration = 2;//floor(($orderInfo['end_at'] - time()) / 60);
-        $duration = 105;//$maxDuration * 60;
+        $maxDuration = floor(($orderInfo['end_at'] - time()) / 60);
+        $duration = $maxDuration * 60;
         // 查询绑定信息
         // 一个订单只能对应一条绑定记录 如果存在则更新绑定
         $bindRecord = CallBindRecord::where('order_no',$orderNo)->first();
