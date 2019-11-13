@@ -109,7 +109,7 @@ class CallController extends Controller
     public function onCallEvent(Request $request)
     {
         $jsonBody = $request->all();
-        $this->callRecordService->saveEvntRecord($jsonBody);
+        $this->callRecordService->saveEventRecord($jsonBody);
         $this->callService->onCallEvent($jsonBody);
     }
 
