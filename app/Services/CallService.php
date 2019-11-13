@@ -182,7 +182,6 @@ class CallService
      */
     public function onCallEvent($jsonBody)
     {
-//        Log::info($jsonBody);
 //        $jsonArr = json_decode($jsonBody, true); //将通知消息解析为关联数组
         $jsonArr = $jsonBody;
 
