@@ -108,63 +108,53 @@ class CallController extends Controller
 
     public function onCallEvent(Request $request)
     {
-//        $jsonBody = json_encode([
-//            'eventType' => 'disconnect',
-//            'statusInfo' => [
-//                'sessionId' => '1200_1827_4294967295_20190124023003@callenabler246.huaweicaas.com',
-//                'timestamp' => '2019-01-24 02:30:22',
-//                'caller' => '+8613800000022',
-//                'called' => '+8613866887021',
-//                'stateCode' => 0,
-//                'stateDesc' => 'The user releases the call.',
-//                'subscriptionId' => '1d39eaef-9279-4d18-b806-72e43ab3f85c'
-//            ]
-//        ]);
         $jsonBody = $request->all();
-        Log::info($jsonBody);
-        $this->callRecordService->saveEventRecord($jsonBody);
+        $this->callRecordService->saveEvntRecord($jsonBody);
         $this->callService->onCallEvent($jsonBody);
     }
 
-    public function onFeeEvent()
+    public function onFeeEvent(Request $request)
     {
-        $jsonBody = json_encode([
-            'eventType' => 'fee',
-            'feeLst' => [
-                [
-                    'direction' => 1,
-                    'spId' => 'linlingoo_omp',
-                    'appKey' => 'V1Z96521zFr3vxe5N2A1UJ1sQ1WP',
-                    'icid' => 'ba171f34e6953fcd751edc77127748f4.3757223714.337238282.9',
-                    'bindNum' => '+8613800000022',
-                    'sessionId' => '1200_1029_4294967295_20190123091514@callenabler246.huaweicaas.com',
-                    'subscriptionId' => 'e97b2863-e7ad-4b4c-87c0-91b0171fe803',
-                    'callerNum' => '+8613800000021',
-                    'calleeNum' => '+8613800000022',
-                    'fwdDisplayNum' => '+8613800000022',
-                    'fwdDstNum' => '+8613866887021',
-                    'callInTime' => '2019-01-23 09:15:14',
-                    'fwdStartTime' => '2019-01-23 09:15:15',
-                    'fwdAlertingTime' => '2019-01-23 09:15:21',
-                    'fwdAnswerTime' => '2019-01-23 09:15:36',
-                    'callEndTime' => '2019-01-23 09:16:41',
-                    'fwdUnaswRsn' => 0,
-                    'ulFailReason' => 0,
-                    'sipStatusCode' => 0,
-                    'callOutUnaswRsn' => 0,
-                    'recordFlag' => 1,
-                    'recordStartTime' => '2019-01-23 09:15:37',
-                    'recordDomain' => 'ostor.huawei.com',
-                    'recordBucketName' => 'sp-v1z96521zfr3vxe5n2a1uj1sq1wp',
-                    'recordObjectName' => '19012309153712050118304.wav',
-                    'ttsPlayTimes' => 0,
-                    'ttsTransDuration' => 0,
-                    'mptyId' => 'e97b2863-e7ad-4b4c-87c0-91b0171fe803',
-                    'serviceType' => '004',
-                    'hostName' => 'callenabler246.huaweicaas.com'
-                ]
-            ]
-        ]);
+//        $jsonBody = json_encode([
+//            'eventType' => 'fee',
+//            'feeLst' => [
+//                [
+//                    'direction' => 1,
+//                    'spId' => 'linlingoo_omp',
+//                    'appKey' => 'V1Z96521zFr3vxe5N2A1UJ1sQ1WP',
+//                    'icid' => 'ba171f34e6953fcd751edc77127748f4.3757223714.337238282.9',
+//                    'bindNum' => '+8613800000022',
+//                    'sessionId' => '1200_1029_4294967295_20190123091514@callenabler246.huaweicaas.com',
+//                    'subscriptionId' => 'e97b2863-e7ad-4b4c-87c0-91b0171fe803',
+//                    'callerNum' => '+8613800000021',
+//                    'calleeNum' => '+8613800000022',
+//                    'fwdDisplayNum' => '+8613800000022',
+//                    'fwdDstNum' => '+8613866887021',
+//                    'callInTime' => '2019-01-23 09:15:14',
+//                    'fwdStartTime' => '2019-01-23 09:15:15',
+//                    'fwdAlertingTime' => '2019-01-23 09:15:21',
+//                    'fwdAnswerTime' => '2019-01-23 09:15:36',
+//                    'callEndTime' => '2019-01-23 09:16:41',
+//                    'fwdUnaswRsn' => 0,
+//                    'ulFailReason' => 0,
+//                    'sipStatusCode' => 0,
+//                    'callOutUnaswRsn' => 0,
+//                    'recordFlag' => 1,
+//                    'recordStartTime' => '2019-01-23 09:15:37',
+//                    'recordDomain' => 'ostor.huawei.com',
+//                    'recordBucketName' => 'sp-v1z96521zfr3vxe5n2a1uj1sq1wp',
+//                    'recordObjectName' => '19012309153712050118304.wav',
+//                    'ttsPlayTimes' => 0,
+//                    'ttsTransDuration' => 0,
+//                    'mptyId' => 'e97b2863-e7ad-4b4c-87c0-91b0171fe803',
+//                    'serviceType' => '004',
+//                    'hostName' => 'callenabler246.huaweicaas.com'
+//                ]
+//            ]
+//        ]);
+
+        $jsonBody = $request->all();
+        $this->callService->onFeeEvent($jsonBody);
     }
 
 }

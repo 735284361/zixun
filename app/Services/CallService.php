@@ -242,50 +242,29 @@ class CallService
         $jsonArr = json_decode($jsonBody, true); //将通知消息解析为关联数组
         $eventType = $jsonArr['eventType']; //通知事件类型
 
-        if (strcasecmp($eventType, 'fee') == 0) {
+        if (strcasecmp($eventType, 'fee') != 0) {
             return;
         }
 
-        if (!array_key_exists('statusInfo', $jsonArr)) {
+        if (!array_key_exists('feeLst', $jsonArr)) {
             return;
         }
-        $statusInfo = $jsonArr['statusInfo']; //呼叫状态事件信息
-
-        //callin：呼入事件
-        if (strcasecmp($eventType, 'callin') == 0) {
-            if (array_key_exists('sessionId', $statusInfo)) {
-                print_r('sessionId: ' . $statusInfo['sessionId'] . PHP_EOL);
+        $feeLst = $jsonArr['feeLst']; //呼叫话单事件信息
+        //短时间内有多个通话结束时隐私保护通话平台会将话单合并推送,每条消息最多携带50个话单
+        if (sizeof($feeLst) > 1) {
+            foreach ($feeLst as $loop){
+                Log::info($loop);
+                if (array_key_exists('sessionId', $loop)) {
+                    print_r('sessionId: ' . $loop['sessionId'] . PHP_EOL);
+                }
             }
-            return;
-            ;
-        }
-        //callout：呼出事件
-        if (strcasecmp($eventType, 'callout') == 0) {
-            if (array_key_exists('sessionId', $statusInfo)) {
-                print_r('sessionId: ' . $statusInfo['sessionId'] . PHP_EOL);
+        } else if(sizeof($feeLst) == 1) {
+            Log::info($feeLst);
+            if (array_key_exists('sessionId', $feeLst[0])) {
+                print_r('sessionId: ' . $feeLst[0]['sessionId'] . PHP_EOL);
             }
-            return;
-        }
-        //alerting：振铃事件
-        if (strcasecmp($eventType, 'alerting') == 0) {
-            if (array_key_exists('sessionId', $statusInfo)) {
-                print_r('sessionId: ' . $statusInfo['sessionId'] . PHP_EOL);
-            }
-            return;
-        }
-        //answer：应答事件
-        if (strcasecmp($eventType, 'answer') == 0) {
-            if (array_key_exists('sessionId', $statusInfo)) {
-                print_r('sessionId: ' . $statusInfo['sessionId'] . PHP_EOL);
-            }
-            return;
-        }
-        //disconnect：挂机事件
-        if (strcasecmp($eventType, 'disconnect') == 0) {
-            if (array_key_exists('sessionId', $statusInfo)) {
-                print_r('sessionId: ' . $statusInfo['sessionId'] . PHP_EOL);
-            }
-            return;
+        } else {
+            print_r('feeLst error: no element.');
         }
     }
 

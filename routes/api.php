@@ -102,5 +102,6 @@ Route::group(['prefix' => '/v1'], function () {
     });
     //呼叫回调
     Route::any('call/onCallEvent','Mini\CallController@onCallEvent');
+    Route::any('call/onFeeEvent','Mini\CallController@onFeeEvent');
 });
 
