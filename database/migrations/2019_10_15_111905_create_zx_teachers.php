@@ -27,8 +27,9 @@ class CreateZxTeachers extends Migration
             $table->string('background')->comment('背景介绍');
             $table->string('good_at_filed')->comment('擅长领域');
             $table->bigInteger('page_view')->default(0)->comment('访客量');
-            $table->double('score',2)->default(10)->comment('评分');
-            $table->bigInteger('duration')->default(0)->comment('咨询时长');
+            $table->integer('score')->default(0)->comment('评分');
+            $table->integer('number_reputation')->default(0)->comment('评分人次');
+            $table->integer('duration')->default(0)->comment('咨询时长(分钟)');
             $table->integer('consultants')->default(0)->comment('咨询人数');
             $table->integer('eval_num')->default(0)->comment('评论人数');
             $table->tinyInteger('status')->default(10)->comment('状态');

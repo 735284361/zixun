@@ -184,7 +184,7 @@ class CallController extends Controller
 //        ]);
 
         $jsonBody = $request->all();
-        $this->callService->onFeeEvent($jsonBody);
+        return $this->callService->onFeeEvent($jsonBody);
     }
 
 }

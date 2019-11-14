@@ -71,10 +71,35 @@ class OrdersController extends Controller
     {
         $status = $request->input('status',0);
 
-        $status == 0 ? '' : $maps['status']  = $status;
+        $status == 0 ? '' : $maps['status']  = $status; // status == 0 则查询所有状态订单，否则查询指定状态订单
         $maps['user_id'] = auth('api')->id();
 
-        return Order::orderBy('id','desc')->with('userInfo')->with('teacher')->where($maps)->paginate(10);
+        // 如果是讲师
+        if (Teacher::where('user_id',auth('api')->id())->exists()) {
+            // 查询所有订单 包含被咨询的订单
+            $teacherId = Teacher::where('user_id',auth('api')->id())->value('id');
+            // 允许展示给老师的订单状态 已支付、已完成、已取消等订单
+            $statusArr = [
+                Order::ORDER_PAID,
+                Order::ORDER_COMPLETED
+            ];
+            if ($status == 0) { // 查询所有订单
+                $list = Order::orderBy('id','desc')->with('userInfo')->with('teacher')
+                    ->where($maps)->orWhere(function($query) use ($teacherId, $statusArr) { // 自己被咨询的订单 订单状态为特定状态
+                        $query->where('teacher_id',$teacherId)->whereIn('status',$statusArr);
+                    })->paginate(100);
+                return $list;
+            } else if (in_array($status,$statusArr)) { // 查询指定状态的订单 如果指定的订单状态不展示给讲师用户则跳过
+                $teacherMaps['teacher_id'] = $teacherId;
+                $teacherMaps['status'] = $status;
+                $list = Order::orderBy('id','desc')->with('userInfo')->with('teacher')
+                    ->where($maps)->orWhere(function($query) use ($teacherMaps) { // 自己被咨询的订单 订单状态为特定状态
+                        $query->where($teacherMaps);
+                    })->paginate(100);
+                return $list;
+            } // 其他情况只返回用户自己的订单
+        }
+        return Order::orderBy('id','desc')->with('userInfo')->with('teacher')->where($maps)->paginate(100);
     }
 
 }
