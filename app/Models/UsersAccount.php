@@ -9,4 +9,6 @@ class UsersAccount extends Model
     //
 
     protected $table = 'users_account';
+
+    protected $guarded = [];
 }

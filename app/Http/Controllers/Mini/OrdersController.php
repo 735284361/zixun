@@ -102,4 +102,18 @@ class OrdersController extends Controller
         return Order::orderBy('id','desc')->with('userInfo')->with('teacher')->where($maps)->paginate(100);
     }
 
+    /**
+     * 订单结束
+     * @param Request $request
+     * @throws \Illuminate\Validation\ValidationException
+     * @throws \Throwable
+     */
+    public function completeOrder(Request $request)
+    {
+        $this->validate($request,['order_no'=>'required']);
+
+        $order = Order::where('order_no',$request->order_no)->first();
+        return $this->orderService->completeOrder($order);
+    }
+
 }

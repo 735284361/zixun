@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Jobs\CompleteOrder;
 use App\Models\Order;
 use App\Models\PayLog;
 use App\Models\UsersSub;
@@ -54,7 +55,6 @@ class PayService
 
     public function callback()
     {
-        Log::warning('start');
         $payment = \EasyWeChat::payment();
 
         $response = $payment->handlePaidNotify(function($message, $fail){
@@ -84,6 +84,11 @@ class PayService
 
             // 进入消息发送系统
             MessageService::paySuccessMsg($order);
+            // 定时结束订单任务
+            if ($data['end_at'] > time()) {
+                $deley = $data['end_at'] - time();
+                CompleteOrder::dispatch($order,30);
+            }
 
             echo "SUCCESS";
             return true; // 返回处理完成

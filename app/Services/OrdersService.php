@@ -6,6 +6,7 @@ use App\Jobs\CloseOrder;
 use App\Models\Order;
 use App\Models\Teacher;
 use App\Models\TeachersTime;
+use App\Models\UsersAccount;
 use Illuminate\Support\Facades\DB;
 
 class OrdersService
@@ -18,6 +19,14 @@ class OrdersService
         $this->payService = new PayService();
     }
 
+    /**
+     * 添加订单
+     * @param $data
+     * @return array
+     * @throws \EasyWeChat\Kernel\Exceptions\InvalidArgumentException
+     * @throws \EasyWeChat\Kernel\Exceptions\InvalidConfigException
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
     public function addOrder($data)
     {
         $order = new Order();
@@ -137,6 +146,44 @@ class OrdersService
     public function orderInfo($orderNo)
     {
         return Order::with('userInfo')->with('teacher')->where('order_no',$orderNo)->first();
+    }
+
+    /**
+     * 订单完成
+     * @param Order $order
+     * @throws \Throwable
+     */
+    public function completeOrder(Order $order)
+    {
+        // 订单结束
+        // 只有订单状态为已支付 才进行订单关闭的操作
+        if ($order->status != Order::ORDER_PAID) {
+            return;
+        }
+
+        DB::transaction(function() use ($order) {
+            // 更新订单状态
+            $order->status = Order::ORDER_COMPLETED;
+            $order->save();
+            // 修改讲师咨询时长
+            $order->teacher()->increment('duration',$order->time_len);
+            // 修改用户咨询时长
+            UsersAccount::where('user_id',$order->user_id)->increment('duration',$order->time_len);
+            // 添加入账账单记录
+            $billService = new BillService();
+            $bill = $billService->saveEntryBill($order->order_no,$order->teacher_id,$order->total_fee);
+            // 修改讲师入账中的余额
+            $userAccount = UsersAccount::firstOrNew(['user_id' => $order->teacher->user_id]);
+            $userAccount->account_waiting = $userAccount->account_waiting + $bill['entry_fee'];
+            $userAccount->save();
+
+            // 通知服务
+            MessageService::orderCompleteMsg($order);
+
+//            UsersAccount::where('user_id',$order->teacher->user_id)->increment('account_waiting',$bill['entry_fee']);
+            // 讲师分成入账 计划任务 每日定时结算七日前的账单
+            return;
+        });
     }
 
 }

@@ -25,7 +25,11 @@ class TeachersController extends Controller
         $this->teacherService = new TeachersService();
     }
 
-    // 讲师列表
+    /**
+     * 讲师列表
+     * @param Request $request
+     * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
+     */
     public function lists(Request $request)
     {
         $id = $request->id;
@@ -41,7 +45,11 @@ class TeachersController extends Controller
         return $list;
     }
 
-    // 讲师详情
+    /**
+     * 讲师详情
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function detail(Request $request)
     {
         $id = $request->id;

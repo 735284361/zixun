@@ -3,6 +3,8 @@
 namespace App\Jobs;
 
 use App\Models\Order;
+use App\Models\UsersAccount;
+use App\Services\OrdersService;
 use Illuminate\Bus\Queueable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
@@ -31,8 +33,6 @@ class CompleteOrder implements ShouldQueue
 
     /**
      * Execute the job.
-     *
-     * @return void
      */
     public function handle()
     {
@@ -41,18 +41,9 @@ class CompleteOrder implements ShouldQueue
         if ($this->order->status != Order::ORDER_PAID) {
             return;
         }
-
-        DB::transaction(function() {
-            // 更新订单状态
-            $this->order->status = Order::ORDER_COMPLETED;
-            $this->order->save();
-
-
-        });
-        // 修改讲师咨询时长
-        // 修改用户咨询时长
-        // 讲师分成入账
-
-
+        // 进入订单完成流程
+        $orderService = new OrdersService();
+        $orderService->completeOrder($this->order);
+        return;
     }
 }
