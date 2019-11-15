@@ -87,7 +87,7 @@ class PayService
             // 定时结束订单任务
             if ($data['end_at'] > time()) {
                 $deley = $data['end_at'] - time();
-                CompleteOrder::dispatch($order,30);
+                CompleteOrder::dispatch($order,$deley);
             }
 
             echo "SUCCESS";
