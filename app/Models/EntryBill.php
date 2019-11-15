@@ -12,6 +12,6 @@ class EntryBill extends Model
 
     const BILL_STATUS_WAITING = 10; // 入账中
     const BILL_STATUS_COMPLETED = 20; // 已入账
-    const BILL_STATUS_CANCEL = 30; // 
+    const BILL_STATUS_CANCEL = 30; // 订单取消
 
 }
