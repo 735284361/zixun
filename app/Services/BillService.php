@@ -26,7 +26,6 @@ class BillService
         $entryBill->total_fee = $totalFee;
         $entryBill->entry_fee = $entryFee;
         $entryBill->commission = $commission;
-        $entryBill->entry_at = Carbon::now();
         if ($entryBill->save()) {
             return $entryBill;
         } else {

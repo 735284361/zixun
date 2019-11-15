@@ -26,7 +26,7 @@ class Order extends Model
     // 订单评论
     public function orderEval()
     {
-        return $this->belongsTo(OrderEval::class,'order_id','id');
+        return $this->hasOne(OrderEval::class,'order_id','id');
     }
 
     // 获取用户信息
@@ -57,6 +57,12 @@ class Order extends Model
     public function phoneBindInfo()
     {
         return $this->hasOne(BindRecord::class,'order_no','order_no');
+    }
+
+    // 分成账单
+    public function bill()
+    {
+        return $this->hasOne(EntryBill::class,'order_no','order_no');
     }
 
     // 获取订单号

@@ -86,7 +86,7 @@ class OrdersController extends Controller
                 Order::ORDER_COMPLETED
             ];
             if ($status == 0) { // 查询所有订单
-                $list = Order::orderBy('id','desc')->with('userInfo')->with('teacher')
+                $list = Order::orderBy('id','desc')->with('userInfo')->with('teacher')->with('orderEval')->with('bill')
                     ->where($maps)->orWhere(function($query) use ($teacherId, $statusArr) { // 自己被咨询的订单 订单状态为特定状态
                         $query->where('teacher_id',$teacherId)->whereIn('status',$statusArr);
                     })->paginate(100);
@@ -94,14 +94,14 @@ class OrdersController extends Controller
             } else if (in_array($status,$statusArr)) { // 查询指定状态的订单 如果指定的订单状态不展示给讲师用户则跳过
                 $teacherMaps['teacher_id'] = $teacherId;
                 $teacherMaps['status'] = $status;
-                $list = Order::orderBy('id','desc')->with('userInfo')->with('teacher')
+                $list = Order::orderBy('id','desc')->with('userInfo')->with('teacher')->with('orderEval')->with('bill')
                     ->where($maps)->orWhere(function($query) use ($teacherMaps) { // 自己被咨询的订单 订单状态为特定状态
                         $query->where($teacherMaps);
                     })->paginate(100);
                 return $list;
             } // 其他情况只返回用户自己的订单
         }
-        return Order::orderBy('id','desc')->with('userInfo')->with('teacher')->where($maps)->paginate(100);
+        return Order::orderBy('id','desc')->with('userInfo')->with('teacher')->with('orderEval')->with('bill')->where($maps)->paginate(100);
     }
 
     /**

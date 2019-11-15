@@ -145,7 +145,7 @@ class OrdersService
      */
     public function orderInfo($orderNo)
     {
-        return Order::with('userInfo')->with('teacher')->where('order_no',$orderNo)->first();
+        return Order::with('userInfo')->with('teacher')->with('orderEval')->with('bill')->where('order_no',$orderNo)->first();
     }
 
     /**

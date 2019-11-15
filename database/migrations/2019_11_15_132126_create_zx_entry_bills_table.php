@@ -21,7 +21,7 @@ class CreateZxEntryBillsTable extends Migration
             $table->double('entry_fee',10,2)->comment('入账金额');
             $table->double('commission',10,2)->comment('佣金');
             $table->tinyInteger('status')->default(10)->comment('状态');
-            $table->timestamp('entry_at')->comment('入账时间');
+            $table->timestamp('entry_at')->nullable()->comment('入账时间');
             $table->timestamps();
         });
     }
