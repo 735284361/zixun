@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers\Mini;
 
+use App\Http\Requests\OrderEvalRequest;
 use App\Http\Requests\OrderRequest;
 use App\Models\Order;
 use App\Models\Teacher;
+use App\Services\OrderEvalService;
 use App\Services\OrdersService;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -114,6 +116,23 @@ class OrdersController extends Controller
 
         $order = Order::where('order_no',$request->order_no)->first();
         return $this->orderService->completeOrder($order);
+    }
+
+    /**
+     * 订单评论
+     * @param OrderEvalRequest $request
+     * @return array
+     */
+    public function orderEval(OrderEvalRequest $request)
+    {
+        $orderEvalService = new OrderEvalService();
+        $res = $orderEvalService->saveOrderEval($request->all());
+        if ($res) {
+            $arr = ['code' => 0,'msg' => 'success'];
+        } else {
+            $arr = ['code' => 1,'msg' => 'fail'];
+        }
+        return $arr;
     }
 
 }

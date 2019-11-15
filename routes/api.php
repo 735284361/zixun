@@ -62,6 +62,7 @@ Route::group(['prefix' => '/v1'], function () {
             Route::get('repay','Mini\OrdersController@repay');
             Route::get('order_list','Mini\OrdersController@orderList');
             Route::post('complete','Mini\OrdersController@completeOrder');
+            Route::post('order_eval','Mini\OrdersController@orderEval');
             Route::get('test','Mini\OrdersController@test');
         });
 
