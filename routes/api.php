@@ -32,6 +32,9 @@ Route::group(['prefix' => '/v1'], function () {
 
     // Tag 标签
     Route::get('tag/list','Mini\TagsController@lists'); // 列表
+
+    // 搜索
+    Route::get('search/search','Mini\SearchController@search');
     /**
      * ****************************************
      * 登录验证
