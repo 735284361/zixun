@@ -59,27 +59,23 @@ class TeachersController extends Controller
 
         $data = Teacher::where('id',$id)->with(['tags' => function($query) {
             // 讲师标签
-            return $query->select('tag');
+            $query->select('tag');
         }])->with(['teacherTimes' => function($query) {
             // 讲师时间
             $startAt = strtotime(date('Ymd'));
             $endAt = $startAt + 30*24*3600;
-            return $query->where('date_at','>=',$startAt)->where('date_at','<=',$endAt);
+            $query->where('date_at','>=',$startAt)->where('date_at','<=',$endAt);
+        }])->with(['orders' => function($query) {
+            // 咨询历史
+            $query->where('status',Order::ORDER_COMPLETED)->where('subject','!=',null)
+                ->with(['user' => function($query) {
+                    $query->select(['uid','username','head_image']);
+                }])->get();
+        }])->with(['orderEval' => function($query) {
+            $query->where('content','!=',null)->with(['user' => function($query) {
+                $query->select(['uid','username','head_image']);
+            }]);
         }])->withCount('userLike')->first();
-
-        // 咨询历史
-        $orders = Order::where('teacher_id',$id)->where('subject','!=',null)
-            ->where('status',Order::ORDER_COMPLETED)
-            ->with(['user' => function($query) {
-                return $query->select(['uid','username','head_image']);
-            }])->get();
-        $data->orders = $orders;
-
-        // 评论
-        $eval = OrderEval::where('teacher_id',$id)->with(['user' => function($query) {
-            return $query->select(['uid','username','head_image']);
-        }])->get();
-        $data->eval = $eval;
 
         return response()->json($data);
     }

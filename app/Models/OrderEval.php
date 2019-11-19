@@ -12,6 +12,6 @@ class OrderEval extends Model
 
     public function user()
     {
-        return $this->hasOne(\App\User::class,'uid','user_id');
+        return $this->belongsTo(\App\User::class,'user_id','uid');
     }
 }

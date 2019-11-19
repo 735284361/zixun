@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Models\Order;
 use App\Models\Teacher;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
@@ -55,6 +56,11 @@ class User extends Authenticatable
     public function teacherInfo()
     {
         return $this->hasOne(Teacher::class,'user_id','uid');
+    }
+
+    public function order()
+    {
+        return $this->hasMany(Order::class,'user_id','uid');
     }
 
 }
