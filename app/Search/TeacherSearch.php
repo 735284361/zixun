@@ -11,12 +11,13 @@ class TeacherSearch
 {
     public static function apply(Request $filters)
     {
-        DB::enableQueryLog();
-        $query = static::applyDecoratorsFromRequest($filters, (new Teacher())->newQuery());
-        $list = static::getResults($query);
-        $sql = DB::getQueryLog();
-//        dd($sql);
-        return $list;
+//        DB::enableQueryLog();
+//        $query = static::applyDecoratorsFromRequest($filters, (new Teacher())->newQuery());
+//        $list = static::getResults($query);
+//        $sql = DB::getQueryLog();
+////        dd($sql);
+//        return $list;
+        return static::applyDecoratorsFromRequest($filters, (new Teacher())->newQuery());
     }
 
     private static function applyDecoratorsFromRequest(Request $request, Builder $query)

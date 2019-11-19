@@ -6,6 +6,7 @@ use App\Models\CallBindRecord;
 use App\Models\CallBindRecordLog;
 use App\Models\CallEventRecord;
 use App\Models\CallFeeRecord;
+use App\Models\Order;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Schema;
@@ -88,9 +89,17 @@ class CallRecordService
                     in_array($k,$columns) ? $feeRecord[$k] = $v : '';
                 }
 
+                $subscriptionId = $data['subscription_id'];
                 // 计算通话时长
                 if (array_key_exists('fwd_answer_time',$feeRecord) && array_key_exists('call_end_time',$feeRecord)) {
-                    $feeRecord['call_time_len'] = strtotime($feeRecord['call_end_time']) - strtotime($feeRecord['fwd_answer_time']);
+                    $duration = strtotime($feeRecord['call_end_time']) - strtotime($feeRecord['fwd_answer_time']);
+                    $feeRecord['call_time_len'] = $duration;
+                    // 将通话时长累加到对应订单
+//                    Order::whereHas('phoneBindInfo', function($query) use ($subscriptionId) {
+//                        $query->whereHas('subscription', function($query2) use ($subscriptionId) {
+//                            $query2->where('subscription_id',$subscriptionId);
+//                        });
+//                    })->increment('duration',$duration);
                 }
                 $feeRecord['created_at'] = date('Y-m-d H:i:s',time());
                 $feeRecord['updated_at'] = date('Y-m-d H:i:s',time());

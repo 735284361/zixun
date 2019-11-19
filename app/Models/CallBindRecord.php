@@ -30,4 +30,9 @@ class CallBindRecord extends Model
         return $this->hasMany(CallSubscription::class,'bind_id','id');
     }
 
+    public function order()
+    {
+        return $this->belongsTo(Order::class,'order_no','order_no');
+    }
+
 }

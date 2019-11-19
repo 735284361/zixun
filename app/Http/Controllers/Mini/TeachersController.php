@@ -7,6 +7,7 @@ use App\Models\Order;
 use App\Models\OrderEval;
 use App\Models\Teacher;
 use App\Models\TeachersTime;
+use App\Search\TeacherSearch;
 use App\Services\TeachersService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -37,8 +38,9 @@ class TeachersController extends Controller
         if ($id) {
             $map['id'] = $id;
         }
-
-        $list = Teacher::with(['tags' => function($query) {
+        // 调用搜索接口
+        $query = TeacherSearch::apply($request);
+        $list = $query->with(['tags' => function($query) {
             // 老师标签
             return $query->select('tag');
         }])->where('status',Teacher::STATUS_ENABLE)->where($map)->paginate(20);

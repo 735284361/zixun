@@ -12,4 +12,9 @@ class CallSubscription extends Model
 
     protected $guarded = [];
 
+    public function bindInfo()
+    {
+        return $this->belongsTo(CallBindRecord::class,'bind_id','id');
+    }
+
 }
