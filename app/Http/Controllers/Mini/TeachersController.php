@@ -33,6 +33,7 @@ class TeachersController extends Controller
      */
     public function lists(Request $request)
     {
+//        dd($request->all());
         $id = $request->id;
         $map = [];
         if ($id) {

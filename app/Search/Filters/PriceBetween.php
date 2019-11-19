@@ -14,7 +14,7 @@ class PriceBetween implements Filter
     {
         $when = false;
         // 条件维数组 切不存在空值
-        if (is_array($value) && !in_array('',$value)) {
+        if (is_array($value) && !in_array('', $value) && !empty($value)) {
             $when = true;
         }
         return $builder->when($when, function($query) use ($value) {

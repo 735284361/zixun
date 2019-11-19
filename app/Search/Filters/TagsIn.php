@@ -14,7 +14,7 @@ class TagsIn implements Filter
     public static function apply(Builder $builder, $value)
     {
         $when = false;
-        if (is_array($value) && !in_array('',$value)) {
+        if (is_array($value) && !in_array('',$value) && !empty($value)) {
             $when = true;
         }
         return $builder

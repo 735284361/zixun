@@ -24,7 +24,7 @@ Route::get('/wechat/register', 'Mini\WeChatController@register');
 Route::group(['prefix' => '/v1'], function () {
 
     // 讲师接口
-    Route::get('/teacher/list', 'Mini\TeachersController@lists'); // 列表
+    Route::post('/teacher/list', 'Mini\TeachersController@lists'); // 列表
     Route::get('/teacher/detail', 'Mini\TeachersController@detail'); // 详情
 
     // Banner 列表

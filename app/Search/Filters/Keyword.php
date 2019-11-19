@@ -13,6 +13,7 @@ class Keyword implements Filter
      */
     public static function apply(Builder $builder, $value)
     {
+//        dd($value);
         return $builder
             ->when($value, function($query) use ($value) {
                 $query->orWhere('name','like','%'.$value.'%')
