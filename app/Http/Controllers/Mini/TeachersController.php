@@ -71,7 +71,7 @@ class TeachersController extends Controller
         $orders = Order::where('teacher_id',$id)->where('subject','!=',null)
             ->where('status',Order::ORDER_COMPLETED)
             ->with(['user' => function($query) {
-                $query->select(['uid','username','head_image']);
+                return $query->select(['uid','username','head_image']);
             }])->get();
         $data->orders = $orders;
 

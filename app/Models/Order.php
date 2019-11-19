@@ -32,7 +32,7 @@ class Order extends Model
     // 获取用户信息
     public function user()
     {
-        return $this->belongsTo(\App\User::class,'uid','user_id');
+        return $this->hasOne(\App\User::class,'uid','user_id');
     }
 
     // 用户信息
