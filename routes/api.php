@@ -35,6 +35,9 @@ Route::group(['prefix' => '/v1'], function () {
 
     // 搜索
     Route::get('search/search','Mini\SearchController@search');
+
+    // 热词
+    Route::get('words/list','Mini\HotWordsController@lists');
     /**
      * ****************************************
      * 登录验证

@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers\Mini;
 
+use App\Models\HotWord;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use Wechat\Model\HotWordsModel;
 
 class HotWordsController extends Controller
 {
@@ -12,9 +12,8 @@ class HotWordsController extends Controller
 
     public function lists(Request $request)
     {
-        $perPage = $request->per_page;
-
-        $list = HotWordsModel::where()->paginate($perPage);
+        $perPage = $request->input('per_page',5);
+        return HotWord::where('status',HotWord::WORDS_STATUS_ENABLE)->paginate($perPage);
     }
 
 }

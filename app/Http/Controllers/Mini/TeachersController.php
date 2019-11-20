@@ -77,6 +77,9 @@ class TeachersController extends Controller
             }]);
         }])->withCount('userLike')->first();
 
+        // 增加访客量
+        $data->increment('page_view');
+
         return response()->json($data);
     }
 
