@@ -20,8 +20,8 @@ class WithdrawController extends Controller
 
     public function apply(WithdrawRequest $request)
     {
-        $res = $this->withdrawService->apply($request->all());
-        dd($res);
+        $this->withdrawService->apply($request->all());
+        return $this->withdrawService->error();
     }
 
 }
