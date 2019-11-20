@@ -50,6 +50,7 @@ Route::group(['prefix' => '/v1'], function () {
             Route::get('account','Mini\UsersController@myAccount');
             Route::get('user_info','Mini\UsersController@userInfo');
             Route::post('post_user_info','Mini\UsersController@postUserInfo');
+            Route::post('withdraw/apply','Mini\WithdrawController@apply');
         });
 
         // 讲师
