@@ -70,6 +70,7 @@ Route::group(['prefix' => '/v1'], function () {
             Route::get('order_list','Mini\OrdersController@orderList');
             Route::post('complete','Mini\OrdersController@completeOrder');
             Route::post('order_eval','Mini\OrdersController@orderEval');
+            Route::post('teacherCancelOrder/{orderNo}','Mini\OrdersController@teacherCancelOrder');
             Route::get('test','Mini\OrdersController@test');
         });
 
@@ -107,7 +108,7 @@ Route::group(['prefix' => '/v1'], function () {
             Route::any('/pay', 'Mini\PayController@pay');
         });
         Route::any('/callback', 'Mini\PayController@callback');
-//        Route::any('/refund', 'Mini\PayController@refund');
+        Route::any('/refund', 'Mini\PayController@refund');
     });
     //呼叫回调
     Route::any('call/onCallEvent','Mini\CallController@onCallEvent');

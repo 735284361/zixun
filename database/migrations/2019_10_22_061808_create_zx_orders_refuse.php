@@ -16,6 +16,7 @@ class CreateZxOrdersRefuse extends Migration
         Schema::create('zx_orders_refuse', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->bigInteger('order_id')->unique();
+            $table->integer('teacher_id')->comment('讲师ID');
             $table->string('content')->comment('拒绝的内容');
             $table->timestamps();
         });

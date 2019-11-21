@@ -135,4 +135,9 @@ class OrdersController extends Controller
         return $arr;
     }
 
+    public function teacherCancelOrder($orderNo)
+    {
+        $this->orderService->teacherCancelOrder($orderNo);
+    }
+
 }

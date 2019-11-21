@@ -4,6 +4,7 @@ namespace App\Jobs;
 
 use App\Models\Order;
 use App\Models\TeachersTime;
+use App\Services\OrdersService;
 use Illuminate\Bus\Queueable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
@@ -38,16 +39,9 @@ class CloseOrder implements ShouldQueue
         if ($this->order->status != Order::ORDER_PENDING) {
             return;
         }
-        // 通过事务执行 sql
-        \DB::transaction(function() {
-            // 将订单的 closed 字段标记为 true，即关闭订单
-            $this->order->update(['status' => Order::ORDER_INVALID]);
-            // 更新讲师时间状态
-            $timeIdArr = $this->order->orderTimes()->get()->toArray();
-            $timeIdArr = array_column($timeIdArr,'time_id');
-            TeachersTime::whereIn('id',$timeIdArr)->update([
-                'status' => TeachersTime::STATUS_TIMES_ENABLE
-            ]);
-        });
+        // 订单处理
+        $orderService = new OrdersService();
+        $orderService->orderOutTime($this->order);
+        return;
     }
 }

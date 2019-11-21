@@ -17,11 +17,13 @@ class Order extends Model
     const ORDER_PENDING = 10; // 待付款
     const ORDER_PAID = 20; // 已付款
     const ORDER_COMPLETED = 30; // 已完成
-    const ORDER_INVALID = 40; // 已失效
+    const ORDER_INVALID = 40; // 过期失效
     const ORDER_PAID_FAIL = 50; // 支付失败
+    const ORDER_TEACHER_CANCEL = -10; // 讲师取消订单
 
     // 订单前缀
     const ORDER_PRE_ZIXUN = 'ZX';
+    const REFUND_PRE_ZIXUN = 'TK';
 
     // 订单评论
     public function orderEval()
@@ -65,8 +67,14 @@ class Order extends Model
         return $this->hasOne(EntryBill::class,'order_no','order_no');
     }
 
+    // 订单被拒信息
+    public function refused()
+    {
+        return $this->hasOne(OrderRefuse::class,'order_id','id');
+    }
+
     // 获取订单号
-    public function getOrderNo($pre)
+    public static function getOrderNo($pre)
     {
         $data = DB::select('select CreateOrderNo("'.$pre.'",8) as order_no limit 1');
         return $data[0]->order_no;
@@ -78,8 +86,9 @@ class Order extends Model
             self::ORDER_PENDING => '待付款',
             self::ORDER_PAID => '已付款',
             self::ORDER_COMPLETED => '已完成',
-            self::ORDER_INVALID => '已失效',
+            self::ORDER_INVALID => '过期失效',
             self::ORDER_PAID_FAIL => '支付失败',
+            self::ORDER_TEACHER_CANCEL => '讲师取消',
         ];
 
         if ($ind !== null) {

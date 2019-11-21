@@ -96,4 +96,11 @@ class PayService
         return $response;
     }
 
+    public function refund($orderNo, $refundNumber, $totalFee, $refundFee)
+    {
+        $payment = \EasyWeChat::payment();
+
+        return $payment->refund->byOutTradeNumber($orderNo, $refundNumber, $totalFee, $refundFee);
+    }
+
 }

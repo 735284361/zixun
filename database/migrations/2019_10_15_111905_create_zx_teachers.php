@@ -32,6 +32,7 @@ class CreateZxTeachers extends Migration
             $table->integer('duration')->default(0)->comment('咨询时长(分钟)');
             $table->integer('consultants')->default(0)->comment('咨询人数');
             $table->integer('eval_num')->default(0)->comment('评论人数');
+            $table->integer('reputation')->default(100)->comment('老师信誉分');
             $table->tinyInteger('status')->default(10)->comment('状态');
             $table->timestamps();
         });
