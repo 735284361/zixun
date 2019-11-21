@@ -32,6 +32,6 @@ class PayController extends Controller
 
         $refundNumber = Order::getOrderNo(Order::REFUND_PRE_ZIXUN);
 
-        $this->payService->refund($orderNo, $refundNumber, 1, 1);
+        return $this->payService->refund($orderNo, $refundNumber, 1, 1);
     }
 }
