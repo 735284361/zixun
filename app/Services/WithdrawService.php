@@ -23,13 +23,13 @@ class WithdrawService
         $account = UsersAccount::where('user_id',auth('api')->id())->first();
         // 判断账户余额
         if ($account->account < env('WITHDRAW_TOTAL_MIN')) {
-            $this->errors = ['code' => 0,'msg' => '账户余额不足'];
+            $this->errors = ['code' => 1,'msg' => '账户余额不足'];
             return false;
         }
         // 判断当日已申请提现的额度
         $applyCount = Withdraw::where('user_id',auth('api')->id())->whereDate('created_at',Carbon::today())->sum('apply_total');
         if ($applyCount > env('WITHDRAW_TOTAL_MAX')) {
-            $this->errors = ['code' => 0,'msg' => '超过日限额'];
+            $this->errors = ['code' => 1,'msg' => '超过日限额'];
             return false;
         }
         $exception = DB::transaction(function () use($data) {
@@ -58,8 +58,8 @@ class WithdrawService
                 return $e;
             }
         });
-        if (is_null($exception)) {
-            $this->errors = ['code' => 0,'msg' => '提现失败'];
+        if (!is_null($exception)) {
+            $this->errors = ['code' => 1,'msg' => '提现失败'];
         }
         return is_null($exception) ? true : false;
     }
