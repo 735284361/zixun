@@ -109,6 +109,7 @@ Route::group(['prefix' => '/v1'], function () {
         });
         Route::any('/callback', 'Mini\PayController@callback');
         Route::any('/refund', 'Mini\PayController@refund');
+        Route::any('/refundCallback', 'Mini\PayController@refundCallback');
     });
     //呼叫回调
     Route::any('call/onCallEvent','Mini\CallController@onCallEvent');

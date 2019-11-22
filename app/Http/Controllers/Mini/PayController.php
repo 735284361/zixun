@@ -25,13 +25,28 @@ class PayController extends Controller
     }
 
     // 退款
+//    public function refund(Request $request)
+//    {
+//
+//        $orderNo = $request->order_no;
+//
+//        $refundNumber = Order::getOrderNo(Order::REFUND_PRE_ZIXUN);
+//
+//        return $this->payService->refund($orderNo, $refundNumber, 1, 1);
+//    }
+
     public function refund(Request $request)
     {
-
         $orderNo = $request->order_no;
+        $refundNumber = date('YmdHis').rand(10000,99999);
 
-        $refundNumber = Order::getOrderNo(Order::REFUND_PRE_ZIXUN);
+        $pay = \EasyWeChat::payment();
 
-        return $this->payService->refund($orderNo, $refundNumber, 1, 1);
+        return $pay->refund->byOutTradeNumber($orderNo,$refundNumber,1,1);
+    }
+
+    public function refundCallback()
+    {
+        $this->payService->refundCallback();
     }
 }

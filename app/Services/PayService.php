@@ -100,7 +100,25 @@ class PayService
     {
         $payment = \EasyWeChat::payment();
 
-        return $payment->refund->byOutTradeNumber($orderNo, $refundNumber, $totalFee, $refundFee);
+        $res = $payment->refund->byOutTradeNumber($orderNo, $refundNumber, $totalFee, $refundFee);
+        dd($res);
+    }
+
+    public function refundCallback()
+    {
+        $payment = \EasyWeChat::payment();
+        $response = $payment->handleRefundedNotify(function ($message, $reqInfo, $fail) {
+            // 其中 $message['req_info'] 获取到的是加密信息
+            // $reqInfo 为 message['req_info'] 解密后的信息
+            // 你的业务逻辑...
+            Log::log($message);
+            Log::log($reqInfo);
+            Log::log($fail);
+            return true; // 返回 true 告诉微信“我已处理完成”
+            // 或返回错误原因 $fail('参数格式校验错误');
+        });
+
+        $response->send();
     }
 
 }
