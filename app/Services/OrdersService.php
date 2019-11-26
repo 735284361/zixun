@@ -233,33 +233,34 @@ class OrdersService
         // TODO 时间判断
         // 通过事务执行 sql
         $exception = DB::transaction(function() use ($orderNo, $remark) {
-                // 将订单的更新订单状态
-                $this->order->update(['status' => Order::ORDER_TEACHER_CANCEL]);
-                // 更新讲师时间状态
-                $this->restoreTeacherTime();
-                // 讲师信誉分处理
-                // 讲师退单次数判断
-                $refusedCount = OrderRefuse::where('teacher_id',$this->order->teacher_id)->count();
-                if ($refusedCount <= 3) {
-                    // 扣除信誉分
-                    $this->order->teacher()->decrement('reputation');
-                } else {
-                    // 扣款处理
-                    UsersAccount::where('user_id',$this->order->teacher->user_id)->decrement('account',50);
-                }
-                // 添加取消记录
-                $orderRefuse = new OrderRefuse();
-                $orderRefuse->order_id = $this->order->id;
-                $orderRefuse->teacher_id = $this->order->teacher_id;
-                $orderRefuse->remark = $remark;
-                $orderRefuse->save();
-                // 发起退款
-                $refundNo = Order::getOrderNo(Order::REFUND_PRE_ZIXUN);
-                $refundRes = $this->payService->refund($orderNo,$refundNo,$this->order['total_fee'],$this->order['total_fee']);
-                if ($refundRes['code'] != 0) {
-                    return false;
-                }
-                // 通知处理
+            // 将订单的更新订单状态
+            $this->order->update(['status' => Order::ORDER_TEACHER_CANCEL]);
+            // 更新讲师时间状态
+            $this->restoreTeacherTime();
+            // 讲师信誉分处理
+            // 讲师退单次数判断
+            $refusedCount = OrderRefuse::where('teacher_id',$this->order->teacher_id)->count();
+            if ($refusedCount <= 3) {
+                // 扣除信誉分
+                $this->order->teacher()->decrement('reputation');
+            } else {
+                // 扣款处理
+                UsersAccount::where('user_id',$this->order->teacher->user_id)->decrement('account',50);
+            }
+            // 添加取消记录
+            $orderRefuse = new OrderRefuse();
+            $orderRefuse->order_id = $this->order->id;
+            $orderRefuse->teacher_id = $this->order->teacher_id;
+            $orderRefuse->remark = $remark;
+            $orderRefuse->save();
+            // 发起退款
+            $refundNo = Order::getOrderNo(Order::REFUND_PRE_ZIXUN);
+            $refundRes = $this->payService->refund($orderNo,$refundNo,$this->order['total_fee'],$this->order['total_fee']);
+            if ($refundRes['code'] != 0) {
+                return false;
+            }
+            // 通知处理
+            MessageService::teacherCancelOrderMsg($this->order);
         });
 
         if (!is_null($exception)) {
