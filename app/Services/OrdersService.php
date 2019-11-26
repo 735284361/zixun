@@ -8,6 +8,7 @@ use App\Models\OrderRefuse;
 use App\Models\Teacher;
 use App\Models\TeachersTime;
 use App\Models\UsersAccount;
+use EasyWeChat\Kernel\Exceptions\Exception;
 use Illuminate\Support\Facades\DB;
 
 class OrdersService
@@ -203,7 +204,7 @@ class OrdersService
             return;
         }
         // 通过事务执行 sql
-        \DB::transaction(function() {
+        DB::transaction(function() {
             // 将订单的 closed 字段标记为 true，即关闭订单
             $this->order->update(['status' => Order::ORDER_INVALID]);
             // 更新讲师时间状态
@@ -211,11 +212,15 @@ class OrdersService
         });
     }
 
-    public function teacherCancelOrder($orderNo,$content)
+    public function teacherCancelOrder($orderNo,$remark)
     {
+        DB::enableQueryLog();
         $this->order = Order::where('order_no',$orderNo)->whereHas('teacher',function($query) {
             $query->where('user_id',auth('api')->id());
         })->first();
+        $sql = DB::getQueryLog();
+//        dd($sql);
+//        dd($this->order);
         // 判断该讲师是否能操作该订单
         if (!$this->order) {
             return ['code' => 1,'msg' => '未获取到对应订单信息'];
@@ -227,30 +232,41 @@ class OrdersService
         }
         // TODO 时间判断
         // 通过事务执行 sql
-        DB::transaction(function() use ($content) {
-            // 将订单的更新订单状态
-            $this->order->update(['status' => Order::ORDER_TEACHER_CANCEL]);
-            // 更新讲师时间状态
-            $this->restoreTeacherTime();
-            // 讲师信誉分处理
-            // 讲师退单次数判断
-            $refusedCount = OrderRefuse::where('teacher_id',$this->order->teacher_id)->count();
-            if ($refusedCount <= 3) {
-                // 扣除信誉分
-                $this->order->teacher()->decrement('reputation');
-            } else {
-                // 扣款处理
-                UsersAccount::where('user_id',$this->order->teacher->user_id)->decrement('account',50);
-            }
-            // 添加取消记录
-            $orderRefuse = new OrderRefuse();
-            $orderRefuse->order_id = $this->order->id;
-            $orderRefuse->teacher_id = $this->order->teacher_id;
-            $orderRefuse->content = $content;
-            $orderRefuse->save();
-            // 发起退款
-            // 通知处理
+        $exception = DB::transaction(function() use ($orderNo, $remark) {
+                // 将订单的更新订单状态
+                $this->order->update(['status' => Order::ORDER_TEACHER_CANCEL]);
+                // 更新讲师时间状态
+                $this->restoreTeacherTime();
+                // 讲师信誉分处理
+                // 讲师退单次数判断
+                $refusedCount = OrderRefuse::where('teacher_id',$this->order->teacher_id)->count();
+                if ($refusedCount <= 3) {
+                    // 扣除信誉分
+                    $this->order->teacher()->decrement('reputation');
+                } else {
+                    // 扣款处理
+                    UsersAccount::where('user_id',$this->order->teacher->user_id)->decrement('account',50);
+                }
+                // 添加取消记录
+                $orderRefuse = new OrderRefuse();
+                $orderRefuse->order_id = $this->order->id;
+                $orderRefuse->teacher_id = $this->order->teacher_id;
+                $orderRefuse->remark = $remark;
+                $orderRefuse->save();
+                // 发起退款
+                $refundNo = Order::getOrderNo(Order::REFUND_PRE_ZIXUN);
+                $refundRes = $this->payService->refund($orderNo,$refundNo,$this->order['total_fee'],$this->order['total_fee']);
+                if ($refundRes['code'] != 0) {
+                    return false;
+                }
+                // 通知处理
         });
+
+        if (!is_null($exception)) {
+            return ['code' => 1,'msg' => '取消失败'];
+        } else {
+            return ['code' => 0,'msg' => '取消成功'];
+        }
     }
 
     /**
@@ -260,11 +276,14 @@ class OrdersService
     private function restoreTeacherTime()
     {
         // 更新讲师时间状态
-        $timeIdArr = $this->order->orderTimes()->value('time_id');
-        $timeIdArr = array_column($timeIdArr,'time_id');
-        return TeachersTime::whereIn('id',$timeIdArr)->update([
-            'status' => TeachersTime::STATUS_TIMES_ENABLE
-        ]);
+        $timeIdArr = $this->order->orderTimes()->get('time_id');
+        if ($timeIdArr) {
+            $timeIdArr = json_decode($timeIdArr,true);
+            $timeIdArr = array_column($timeIdArr,'time_id');
+            return TeachersTime::whereIn('id',$timeIdArr)->update([
+                'status' => TeachersTime::STATUS_TIMES_ENABLE
+            ]);
+        }
     }
 
 }

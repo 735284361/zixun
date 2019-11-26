@@ -135,9 +135,10 @@ class OrdersController extends Controller
         return $arr;
     }
 
-    public function teacherCancelOrder($orderNo)
+    public function teacherCancelOrder(Request $request)
     {
-        $this->orderService->teacherCancelOrder($orderNo);
+        $this->validate($request,['order_no'=>'required']);
+        return $this->orderService->teacherCancelOrder($request->order_no,$request->remark);
     }
 
 }

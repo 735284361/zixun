@@ -7,5 +7,5 @@ use Illuminate\Database\Eloquent\Model;
 class OrderRefuse extends Model
 {
     //
-    protected $table = 'zx_order_refuse';
+    protected $table = 'zx_orders_refuse';
 }

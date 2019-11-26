@@ -17,7 +17,7 @@ class CreateZxOrdersRefuse extends Migration
             $table->bigIncrements('id');
             $table->bigInteger('order_id')->unique();
             $table->integer('teacher_id')->comment('讲师ID');
-            $table->string('content')->comment('拒绝的内容');
+            $table->string('remark')->nullable()->comment('拒绝的内容');
             $table->timestamps();
         });
     }

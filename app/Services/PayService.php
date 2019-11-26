@@ -100,8 +100,21 @@ class PayService
     {
         $payment = \EasyWeChat::payment();
 
-        $res = $payment->refund->byOutTradeNumber($orderNo, $refundNumber, $totalFee, $refundFee);
-        dd($res);
+        $result = $payment->refund->byOutTradeNumber($orderNo, $refundNumber, $totalFee, $refundFee);
+        if ($result['return_code'] == 'FAIL' || $result['result_code'] == 'FAIL') {
+            $data['code'] = 1;
+            $data['result']  = $result;
+            return $data;
+        } else {
+            $data['code'] = 0;
+            $data['result']  = $result;
+            return $data;
+        }
+    }
+
+    private function saveRefundBill()
+    {
+
     }
 
     public function refundCallback()

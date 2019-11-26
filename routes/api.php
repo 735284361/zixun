@@ -70,7 +70,7 @@ Route::group(['prefix' => '/v1'], function () {
             Route::get('order_list','Mini\OrdersController@orderList');
             Route::post('complete','Mini\OrdersController@completeOrder');
             Route::post('order_eval','Mini\OrdersController@orderEval');
-            Route::post('teacherCancelOrder/{orderNo}','Mini\OrdersController@teacherCancelOrder');
+            Route::post('teacherCancelOrder','Mini\OrdersController@teacherCancelOrder');
             Route::get('test','Mini\OrdersController@test');
         });
 
