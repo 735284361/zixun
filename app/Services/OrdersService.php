@@ -212,6 +212,13 @@ class OrdersService
         });
     }
 
+    /**
+     * 讲师取消订单
+     * @param $orderNo
+     * @param $remark
+     * @return array
+     * @throws \Throwable
+     */
     public function teacherCancelOrder($orderNo,$remark)
     {
         DB::enableQueryLog();
