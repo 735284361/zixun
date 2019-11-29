@@ -126,7 +126,7 @@ class TeachersController extends AdminController
         $form->number('reputation', __('信誉分'))->default(100)->required()->rules(function($form) {
             return 'required|between:0,100';
         });
-        $form->select('status', __('讲师状态'))->options(Teacher::getStatus())->default(10)->required();
+        $form->select('status', __('状态'))->options(Teacher::getStatus())->default(10)->required();
 
         return $form;
     }
