@@ -33,7 +33,7 @@ class TeachersController extends AdminController
             return $this->makeVisible(['phone'])->phone;
         });
         $grid->column('title', __('讲师Title'));
-        $grid->column('list_img_url', __('图片'))->pic('图片')->lightbox(['height'=>100]);
+        $grid->column('list_img_url', __('图片'))->lightbox(['height'=>100]);
         $grid->column('details_img_url', __('Details img url'))->hide();
         $grid->column('work_years', __('工作年限'))->editable();
         $grid->column('original_price', __('划线价'))->editable();
