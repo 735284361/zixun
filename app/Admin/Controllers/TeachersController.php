@@ -2,7 +2,9 @@
 
 namespace App\Admin\Controllers;
 
+use App\Models\Tag;
 use App\Models\Teacher;
+use App\Models\TeachersTag;
 use Encore\Admin\Controllers\AdminController;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
@@ -15,7 +17,7 @@ class TeachersController extends AdminController
      *
      * @var string
      */
-    protected $title = 'App\Models\Teacher';
+    protected $title = '讲师';
 
     /**
      * Make a grid builder.
@@ -52,6 +54,16 @@ class TeachersController extends AdminController
         $grid->column('updated_at', __('更新时间'))->hide();
 
         $grid->fixColumns(4, -1);
+
+        $grid->filter(function ($filter) {
+            $filter->disableIdFilter();
+            $filter->column(1/2,function ($filter) {
+                $filter->like('name','姓名');
+            });
+            $filter->column(1/2,function ($filter) {
+                $filter->equal('status','状态')->select(Teacher::getStatus());
+            });
+        });
 
         return $grid;
     }
@@ -101,32 +113,38 @@ class TeachersController extends AdminController
     {
         $form = new Form(new Teacher);
 
-        $form->number('user_id', __('用户编号'))->disable();
-        $form->text('name', __('讲师姓名'))->required();
-        $form->mobile('phone', __('电话'))->required()->rules(function($form) {
-            return 'unique:zx_teachers,phone,'.$form->model()->id.',id';
+        $form->column(1/2,function ($form) {
+            $form->number('user_id', __('用户编号'))->disable();
+            $form->text('name', __('讲师姓名'))->required();
+            $form->mobile('phone', __('电话'))->required()->rules(function($form) {
+                return 'unique:zx_teachers,phone,'.$form->model()->id.',id';
+            });
+            $form->editing(function ($form) {
+                $form->model()->makeVisible('phone');
+            });
+            $form->text('title', __('讲师Title'))->required();
+            $form->image('list_img_url', __('列表配图'))->required();
+            $form->image('details_img_url', __('详情配图'))->required();
+            $form->text('work_years', __('工作年限'))->required();
+            $form->number('original_price', __('划线价'))->required();
+            $form->number('price', __('咨询价'))->required();
+            $form->multipleSelect('tags','标签')->options(Tag::all()->pluck('tag','id'))->required();
         });
-        $form->editing(function ($form) {
-            $form->model()->makeVisible('phone');
+
+        $form->column(1/2,function ($form) {
+            $form->text('background', __('讲师背景'))->required();
+            $form->text('good_at_filed', __('擅长领域'))->required();
+            $form->number('page_view', __('访客量'))->required();
+            $form->number('score', __('总评分'))->required();
+            $form->number('number_reputation', __('评分数'))->required();
+            $form->number('duration', __('咨询时长'))->required();
+            $form->number('consultants', __('咨询人次'))->required();
+            $form->number('eval_num', __('评论数'))->required();
+            $form->number('reputation', __('信誉分'))->default(100)->required()->rules(function($form) {
+                return 'required|between:0,100';
+            });
+            $form->select('status', __('状态'))->options(Teacher::getStatus())->default(10)->required();
         });
-        $form->text('title', __('讲师Title'))->required();
-        $form->image('list_img_url', __('列表配图'))->required();
-        $form->image('details_img_url', __('详情页配图'))->required();
-        $form->text('work_years', __('工作年限'))->required();
-        $form->number('original_price', __('划线价'))->required();
-        $form->number('price', __('咨询价'))->required();
-        $form->text('background', __('讲师背景'))->required();
-        $form->text('good_at_filed', __('擅长领域'))->required();
-        $form->number('page_view', __('访客量'))->required();
-        $form->number('score', __('总评分'))->required();
-        $form->number('number_reputation', __('评分数'))->required();
-        $form->number('duration', __('咨询总时长'))->required();
-        $form->number('consultants', __('咨询总人次'))->required();
-        $form->number('eval_num', __('评论数'))->required();
-        $form->number('reputation', __('信誉分'))->default(100)->required()->rules(function($form) {
-            return 'required|between:0,100';
-        });
-        $form->select('status', __('状态'))->options(Teacher::getStatus())->default(10)->required();
 
         return $form;
     }
