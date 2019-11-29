@@ -396,6 +396,6 @@ return [
     |
     */
     'extensions' => [
-
+        'grid-lightbox' => [true]
     ],
 ];
