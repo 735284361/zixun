@@ -62,7 +62,12 @@ class Teacher extends Model
         return $this->hasOne(\App\User::class,'uid','user_id');
     }
 
-    public function status($ind = null)
+//    public function getStatusAttribute($value)
+//    {
+//        return self::getStatus($value);
+//    }
+
+    public static function getStatus($ind = null)
     {
         $arr = [
             self::STATUS_ENABLE => '启用',
