@@ -14,7 +14,7 @@ class Tag extends Model
     const STATUS_ENABLE = 10; // 启用
     const STATUS_DISABLE = 20; // 禁用
 
-    public function status($ind = null)
+    public static function getStatus($ind = null)
     {
         $arr = [
             self::STATUS_ENABLE => '启用',

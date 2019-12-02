@@ -134,12 +134,12 @@ class TeachersController extends AdminController
         $form->column(1/2,function ($form) {
             $form->text('background', __('讲师背景'))->required();
             $form->text('good_at_filed', __('擅长领域'))->required();
-            $form->number('page_view', __('访客量'))->required();
-            $form->number('score', __('总评分'))->required();
-            $form->number('number_reputation', __('评分数'))->required();
-            $form->number('duration', __('咨询时长'))->required();
-            $form->number('consultants', __('咨询人次'))->required();
-            $form->number('eval_num', __('评论数'))->required();
+            $form->number('page_view', __('访客量'))->default(0)->required();
+            $form->number('score', __('总评分'))->default(0)->required();
+            $form->number('number_reputation', __('评分数'))->default(0)->required();
+            $form->number('duration', __('咨询时长'))->default(0)->required();
+            $form->number('consultants', __('咨询人次'))->default(0)->required();
+            $form->number('eval_num', __('评论数'))->default(0)->required();
             $form->number('reputation', __('信誉分'))->default(100)->required()->rules(function($form) {
                 return 'required|between:0,100';
             });

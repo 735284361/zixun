@@ -13,5 +13,6 @@ Route::group([
     $router->get('/', 'HomeController@index')->name('admin.home');
     $router->resource('banners', BannerController::class);
     $router->resource('teachers', TeachersController::class);
+    $router->resource('tags', TagsController::class);
 
 });
