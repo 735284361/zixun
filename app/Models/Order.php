@@ -24,6 +24,7 @@ class Order extends Model
     // 订单前缀
     const ORDER_PRE_ZIXUN = 'ZX';
     const REFUND_PRE_ZIXUN = 'TK';
+    const ORDER_PRE_WITHDRAW = 'TX';
 
     // 订单评论
     public function orderEval()

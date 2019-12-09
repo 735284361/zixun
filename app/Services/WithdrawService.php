@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Models\Order;
 use App\Models\UsersAccount;
 use App\Models\Withdraw;
 use App\Models\WithdrawLog;
@@ -48,11 +49,12 @@ class WithdrawService
         }
         $exception = DB::transaction(function () use($data) {
             try {
+                $orderNo = Order::getOrderNo(Order::ORDER_PRE_WITHDRAW);
                 $applyTotal = $data['apply_total'];
                 // 添加提现记录
                 $withdraw = new Withdraw();
                 $withdraw->user_id = auth('api')->id();
-                $withdraw->withdraw_order = '123';
+                $withdraw->withdraw_order = $orderNo;
                 $withdraw->apply_total = $applyTotal;
                 $withdraw->save();
 
