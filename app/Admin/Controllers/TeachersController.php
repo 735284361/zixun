@@ -5,6 +5,7 @@ namespace App\Admin\Controllers;
 use App\Models\Tag;
 use App\Models\Teacher;
 use App\Models\TeachersTag;
+use App\User;
 use Encore\Admin\Controllers\AdminController;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
@@ -38,14 +39,14 @@ class TeachersController extends AdminController
         $grid->column('list_img_url', __('图片'))->lightbox(['height'=>100]);
         $grid->column('details_img_url', __('Details img url'))->hide();
         $grid->column('work_years', __('工作年限'))->editable();
-        $grid->column('original_price', __('划线价'))->editable();
-        $grid->column('price', __('咨询价'))->editable();
+        $grid->column('original_price', __('划线价'))->editable()->sortable();
+        $grid->column('price', __('咨询价'))->editable()->sortable();
         $grid->column('background', __('行业背景'));
         $grid->column('good_at_filed', __('擅长领域'));
         $grid->column('page_view', __('访客'))->editable();
 //        $grid->column('score', __('Score'));
 //        $grid->column('number_reputation', __('Number reputation'));
-        $grid->column('duration', __('咨询时长（分钟）'))->editable();
+        $grid->column('duration', __('咨询时长（分钟）'))->editable()->sortable();
         $grid->column('consultants', __('咨询人数'));
         $grid->column('eval_num', __('评论数'));
         $grid->column('reputation', __('信誉分'))->hide();
@@ -114,7 +115,11 @@ class TeachersController extends AdminController
         $form = new Form(new Teacher);
 
         $form->column(1/2,function ($form) {
-            $form->number('user_id', __('用户编号'))->disable();
+            $form->select('user_id', __('关联用户'))->options(function ($ids) {
+                return User::where('uid',$ids)->pluck('username', 'uid');
+            })->ajax(route('admin.users'))->rules(function($form) {
+                return 'unique:zx_teachers,user_id,'.$form->model()->id.',id';
+            })->required();
             $form->text('name', __('讲师姓名'))->required();
             $form->mobile('phone', __('电话'))->required()->rules(function($form) {
                 return 'unique:zx_teachers,phone,'.$form->model()->id.',id';

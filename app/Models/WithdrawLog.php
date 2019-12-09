@@ -17,4 +17,9 @@ class WithdrawLog extends Model
         return $this->belongsTo(Withdraw::class,'withdraw_id','id');
     }
 
+    public function getStatusAttribute($value)
+    {
+        return Withdraw::getStatus($value);
+    }
+
 }

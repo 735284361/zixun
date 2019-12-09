@@ -15,7 +15,6 @@ class CreateZxWithdrawLogsTable extends Migration
     {
         Schema::create('zx_withdraw_logs', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->integer('user_id')->comment('提现申请人');
             $table->integer('withdraw_id')->comment('提现记录ID');
             $table->string('remark')->comment('备注');
             $table->tinyInteger('status')->comment('提现的状态');

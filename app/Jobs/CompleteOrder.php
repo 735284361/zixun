@@ -26,7 +26,7 @@ class CompleteOrder implements ShouldQueue
      */
     public function __construct(Order $order, $deley)
     {
-        //
+        // TODO 测试自动完成订单
         $this->order = $order;
         $this->delay($deley);
     }
