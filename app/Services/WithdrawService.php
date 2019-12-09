@@ -64,7 +64,8 @@ class WithdrawService
                 $withdrawLog->save();
 
                 // 减少用户账户余额 新增提现中的余额
-                $this->userAccountService->applyWithdraw();
+                $userAccountService = new UsersAccountService($this->withdraw->user_id, $this->withdraw->apply_total);
+                $userAccountService->applyWithdraw();
             }
             catch(Exception $e) {
                 return $e;
